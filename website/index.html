@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE VPN | Next-Gen VLESS & Reality Privacy Tunnels</title>
+  <meta name="description"
+    content="NETFORGE VPN — Modern, undetectable privacy tunnels engineered on VLESS, XTLS-Vision, and Reality. High-speed zero-throttling access for Zoom, YouTube, and global browsing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="stylesheet" href="styles.css?v=1.1">
+</head>
+
+<body>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span></div>
+      </a>
+
+                  <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="vpn.html">VPN</a></li>
+        <li><a href="purchase.html">Purchase</a></li>
+        <li><a href="locations.html">Locations</a></li>
+        <li><a href="status.html">Status</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html?tab=register" class="btn btn-primary btn-sm">Get Started</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- 1. Hero Section (Inspired by Dribbble Reference) -->
+  <section class="hero-section" id="hero">
+    <div class="hero-glow-aura"></div>
+    <div class="container hero-content">
+      <div class="pill-badge">
+        <span class="status-dot"></span> Undetectable VLESS + Reality Protocol Architecture
+      </div>
+
+      <h1 class="hero-title">
+        Browse Unrestricted<br>
+        <span class="gradient-heading">With High-Speed Stealth Tunnels</span>
+      </h1>
+
+      <p class="hero-desc">
+        Engineered for total privacy and zero ISP throttling. Experience high-throughput anti-censorship tunnels optimized specifically for Zoom, YouTube, and global browsing without speed caps or connection drops.
+      </p>
+
+      <div class="hero-cta-wrapper">
+        <a href="#early-access" class="btn btn-primary btn-lg">Request Early Access (First 20 Members) &rarr;</a>
+        <span class="hero-subtext">Exclusive early access limited to first 20 members &bull; No credit card required</span>
+      </div>
+    </div>
+
+    <!-- Dribbble-Style Globe Horizon Graphic -->
+    <div class="hero-globe-wrapper">
+      <img src="globe.svg" alt="Cyber Grid Horizon" class="hero-globe-img">
+    </div>
+  </section>
+
+  <!-- Standards & Open Tech Strip -->
+  <div class="trust-strip">
+    <div class="container">
+      <div class="trust-logos">
+        <div class="trust-brand">🛡️ VLESS Protocol</div>
+        <div class="trust-brand">⚡ XTLS-Vision Flow</div>
+        <div class="trust-brand">🔒 REALITY Stealth</div>
+        <div class="trust-brand">🎥 Zero-Lag Streaming</div>
+        <div class="trust-brand">🌐 Zero ISP Throttling</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. VPN Features Section -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag-label">CORE CAPABILITIES</span>
+        <h2 class="section-title">Engineered Without Bloat</h2>
+        <p class="section-desc">Focused exclusively on rock-solid cryptography, system efficiency, and transparent
+          network tunneling.</p>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3 class="card-title">VLESS + XTLS-Vision</h3>
+          <p class="card-text">Ultra-low latency proxy transport eliminating double-encryption overhead. Handles high-bitrate video streams and video conferences without buffering.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🎭</div>
+          <h3 class="card-title">Reality Obfuscation</h3>
+          <p class="card-text">Directly mimics standard TLS handshakes to verified public servers. Active probing by ISPs or deep packet inspection firewalls sees regular HTTPS traffic.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📹</div>
+          <h3 class="card-title">Zoom & Meeting Optimization</h3>
+          <p class="card-text">Specialized routing profiles optimized for Zoom, Google Meet, and Microsoft Teams. Zero packet dropouts during crucial calls.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">▶️</div>
+          <h3 class="card-title">YouTube & Media Fastpath</h3>
+          <p class="card-text">Bypasses ISP video rate-limiting with dedicated multi-CDN ingress routes, unlocking full 4K 60fps streaming speeds.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3 class="card-title">DNS Leak Isolation</h3>
+          <p class="card-text">All domain resolution queries are strictly routed through encrypted gateway endpoints, preventing ISP query eavesdropping.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <h3 class="card-title">Cross-Client Compatibility</h3>
+          <p class="card-text">Works directly with standard, battle-tested clients like v2rayNG, v2rayN, and Hiddify, as well as the native NETFORGE client.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. How NETFORGE Works Section -->
+  <section class="section" id="how-it-works" style="background: rgba(255, 255, 255, 0.01);">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag-label">TRANSPARENT PIPELINE</span>
+        <h2 class="section-title">How NETFORGE Works</h2>
+        <p class="section-desc">A streamlined 3-step cryptographic architecture that protects your packets from origin
+          to destination.</p>
+      </div>
+
+      <div class="pipeline-flow">
+        <!-- Step 1 -->
+        <div class="pipeline-step">
+          <span class="step-badge">STEP 01</span>
+          <h3>Client Configuration & Profile</h3>
+          <p>Your client configures an authenticated VLESS identity with your dedicated UUID and ephemeral Reality keys. No user account credentials are leaked over the wire.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="pipeline-step">
+          <span class="step-badge">STEP 02</span>
+          <h3>Reality Stealth Handshake</h3>
+          <p>The tunnel encapsulates packet flows inside standard TLS 1.3 handshakes targeting legitimate public domains (like Zoom and Google). Deep-packet firewalls cannot distinguish it from everyday web traffic.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="pipeline-step">
+          <span class="step-badge">STEP 03</span>
+          <h3>High-Throughput Gateway Egress</h3>
+          <p>Traffic routes directly through dedicated high-speed cloud nodes with native IPv4/IPv6 support, stripping ISP video throttles and masking your true origin IP address.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Security & Privacy Section -->
+
+  <section class="section" id="security">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag-label">CRYPTOGRAPHIC INTEGRITY</span>
+        <h2 class="section-title">Security & Privacy First</h2>
+        <p class="section-desc">Honest, verified technical specifications. We prioritize clean code over exaggerated
+          marketing claims.</p>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">🔐</div>
+          <h3 class="card-title">XTLS-Vision Flow</h3>
+          <p class="card-text">Advanced flow control eliminates traditional 'TLS-in-TLS' packet length patterns, rendering proxy traffic immune to heuristic statistical analysis.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔑</div>
+          <h3 class="card-title">X25519 Reality Keys</h3>
+          <p class="card-text">Modern Curve25519 cryptographic key exchange with authenticated short IDs for strong forward secrecy on every session.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3 class="card-title">Zero Protocol Signatures</h3>
+          <p class="card-text">Unlike OpenVPN or legacy protocols which carry identifiable packet header signatures, V2Ray (VMess/Reality) traffic is indistinguishable from standard browser HTTPS.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3 class="card-title">No Telemetry Tracking</h3>
+          <p class="card-text">The NETFORGE website and client configurations contain no tracking scripts, advertising pixels, or behavior surveillance beacons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Supported Platforms & Client Apps -->
+  <section class="section" id="platforms" style="background: rgba(255, 255, 255, 0.01);">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag-label">CLIENT APPS & ECOSYSTEM</span>
+        <h2 class="section-title">Supported Platforms & Downloads</h2>
+        <p class="section-desc">Connect immediately with established open-source clients, or join the beta for our upcoming native NETFORGE client.</p>
+      </div>
+
+      <div class="platforms-grid">
+        <!-- Windows Platform Card -->
+        <div class="platform-card" style="position: relative; overflow: hidden; opacity: 0.85;">
+          <div style="position: absolute; top: 16px; right: 16px; background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.45); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px;">
+            UNDER DEVELOPMENT
+          </div>
+          <div class="platform-header">
+            <div class="platform-icon-box" style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.1);">🪟</div>
+            <div class="platform-title-group">
+              <h3>NETFORGE Windows</h3>
+              <span style="color: #f59e0b;">Windows 10 & 11 (64-bit) &bull; Under Development</span>
+            </div>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            Our dedicated Windows client is currently under active development. Engineered with native proxy switching, one-click subscription syncing, and zero telemetry.
+          </p>
+          <ul class="platform-specs">
+            <li><span class="check-cyan">✓</span> One-click VLESS Reality subscription sync</li>
+            <li><span class="check-cyan">✓</span> Automated Windows System Proxy mode</li>
+            <li><span class="check-cyan">✓</span> Built-in real-time latency ping diagnostics</li>
+            <li><span style="color:#f59e0b; font-weight:700;">⏳</span> Under active development</li>
+          </ul>
+          <div style="display: flex; gap: 10px; flex-direction: column;">
+            <button class="btn btn-secondary btn-full" disabled style="opacity: 0.5; cursor: not-allowed; pointer-events: none; border-color: rgba(245, 158, 11, 0.3); color: #f59e0b;">
+              🚧 Windows Client (Under Development)
+            </button>
+            <p style="font-size: 0.8rem; color: var(--text-dim); text-align: center;">
+              Client application is currently under development.
+            </p>
+          </div>
+        </div>
+
+        <!-- Android Platform Card -->
+        <div class="platform-card" style="position: relative; overflow: hidden; opacity: 0.85;">
+          <div style="position: absolute; top: 16px; right: 16px; background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.45); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px;">
+            UNDER DEVELOPMENT
+          </div>
+          <div class="platform-header">
+            <div class="platform-icon-box" style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.1);">🤖</div>
+            <div class="platform-title-group">
+              <h3>NETFORGE Android</h3>
+              <span style="color: #f59e0b;">Android 8.0+ &bull; Under Development</span>
+            </div>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            Our dedicated Android client is currently under active development. Engineered for seamless mobile roaming, low battery drain, and Always-On VPN protection.
+          </p>
+          <ul class="platform-specs">
+            <li><span class="check-cyan">✓</span> Scan QR code directly from your NETFORGE dashboard</li>
+            <li><span class="check-cyan">✓</span> Negligible battery drain (~2%/hr) with XTLS-Vision</li>
+            <li><span class="check-cyan">✓</span> Compatible with native Android Always-On VPN</li>
+            <li><span style="color:#f59e0b; font-weight:700;">⏳</span> Under active development</li>
+          </ul>
+          <div style="display: flex; gap: 10px; flex-direction: column;">
+            <button class="btn btn-secondary btn-full" disabled style="opacity: 0.5; cursor: not-allowed; pointer-events: none; border-color: rgba(245, 158, 11, 0.3); color: #f59e0b;">
+              🚧 Android Client (Under Development)
+            </button>
+            <p style="font-size: 0.8rem; color: var(--text-dim); text-align: center;">
+              Client application is currently under development.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FAQ Section -->
+  <section class="section" id="faq">
+    <div class="container container-narrow">
+      <div class="section-head">
+        <span class="tag-label">COMMON INQUIRIES</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-desc">Clear, direct answers about our architecture, roadmap, and private testing.</p>
+      </div>
+
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>What stage is NETFORGE currently in?</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>NETFORGE is currently in an active private early-access testing phase. We are validating our
+              cryptographic routing infrastructure and configuration deployment before opening general availability.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>Which VPN protocol does NETFORGE use?</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>NETFORGE operates on modern VLESS + XTLS-Vision + Reality. Unlike older protocols that can be fingerprinted and throttled by ISPs, Reality disguises proxy handshakes as ordinary HTTPS traffic to top public CDN nodes.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>Do I need to install a custom NETFORGE app?</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>No. While our official desktop client is currently in development, you can connect immediately using established open-source clients like v2rayNG (Android), v2rayN (Windows), or Hiddify. Simply import your provided subscription link or scan the QR code.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>Why are you starting with Windows and Android?</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>Windows and Android represent the majority of our early testing community. By focusing our initial
+              testing on these two operating systems, we can rigorously verify tunnel stability, split DNS behavior, and
+              roaming handovers before expanding.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>How does early access work?</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <p>Early access is strictly limited to the first 20 members. Submit your email in the form below. Once the 20-member cap is reached, registration will be closed. Early testers receive private onboarding and direct tunnel configuration credentials.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Early-Access Section -->
+  <section class="section" id="early-access">
+    <div class="container container-narrow">
+      <div class="early-access-card">
+        <span class="tag-label" style="color:var(--electric-cyan); border-color:rgba(0,210,255,0.4);">LIMITED TO FIRST 20 MEMBERS</span>
+        <h2 style="font-size:2.2rem; margin-bottom:12px; color:#fff;">Request Early Access (First 20 Members Only)</h2>
+        <p style="color:var(--text-secondary); max-width:540px; margin:0 auto;">
+          Be among the first 20 members to test NETFORGE. Early access is strictly capped at 20 members to ensure dedicated bandwidth and private testing feedback.
+        </p>
+
+        <form class="early-access-form" id="earlyAccessForm">
+          <div class="form-row">
+            <input type="email" class="form-input" id="waitlistEmail" required
+              placeholder="Enter your email address...">
+            <select class="form-select" id="waitlistPlatform" aria-label="Select Platform">
+              <option value="Both">Early Tester (First 20 Members)</option>
+              <option value="Windows" disabled>Windows (Under Development)</option>
+              <option value="Android" disabled>Android (Under Development)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">Claim 1 of 20 Early Access Slots</button>
+        </form>
+
+        <!-- Dynamic Confirmation Notice -->
+        <div class="confirmation-box" id="waitlistConfirmation">
+          <h4 style="color:#fff; font-size:1.15rem; margin-bottom:6px;">🎉 You're on the early-access list!</h4>
+          <p style="color:var(--text-secondary); font-size:0.9rem;" id="confirmationDetails">
+            We've reserved your slot among the first 20 members for early testing. You will receive an invitation when configuration credentials are ready.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Footer & Legal Placeholders -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <div class="brand">
+            <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+            <div class="brand-text">NET<span>FORGE</span></div>
+          </div>
+          <p>
+            Next-generation privacy and anti-censorship tunnels engineered on modern VLESS and Reality protocol architecture.
+          </p>
+          <a href="mailto:info.netforge@gmail.com" class="footer-contact-link">info.netforge@gmail.com</a>
+        </div>
+
+        <div class="footer-links-group">
+          <div class="footer-col">
+            <h4>Products & Network</h4>
+            <ul>
+              <li><a href="vpn.html">VPN Overview</a></li>
+              <li><a href="purchase.html">Purchase Plans</a></li>
+              <li><a href="purchase.html">Purchase VPN</a></li>
+              <li><a href="locations.html">Server Locations</a></li>
+              <li><a href="status.html">Network Status</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Client & Portal</h4>
+            <ul>
+              <li><a href="login.html">Member Login</a></li>
+              <li><a href="dashboard.html">Member Dashboard</a></li>
+              <li><a href="docs.html">Setup Documentation</a></li>
+              <li><a href="support.html">Customer Support</a></li>
+              <li><a href="#early-access">Request Early Access</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#legal">Privacy Policy</a></li>
+              <li><a href="#legal">Terms of Service</a></li>
+              <li><a href="#legal">Vulnerability Disclosure</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 NETFORGE VPN. All rights reserved.</div>
+        <div style="font-size:0.75rem; color:var(--text-dim);">
+          Engineered for privacy, uncapped streaming, and zero ISP throttling.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

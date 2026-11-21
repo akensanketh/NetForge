@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=vpn.html">
+  <script>window.location.replace("vpn.html");</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE Networking | Private Mesh & Site-to-Site V2Ray</title>
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span></div>
+      </a>
+
+            <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="vpn.html" class="active">VPN</a></li>
+        <li><a href="purchase.html">Purchase</a></li>
+        <li><a href="locations.html">Locations</a></li>
+        <li><a href="status.html">Status</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html?tab=register" class="btn btn-primary btn-sm">Get Started</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-aura"></div>
+    <div class="container hero-content">
+      <div class="pill-badge">
+        <span class="status-indicator"></span> Peer-to-Peer Mesh & Zero-Trust Architecture
+      </div>
+
+      <h1 class="hero-title">
+        Unified Private Networks.<br>
+        <span class="gradient-heading">Forged Without Central Bottlenecks.</span>
+      </h1>
+
+      <p class="hero-desc">
+        Connect remote branches, cloud clusters, on-prem servers, and developer workstations into a seamless, high-speed, cryptographically authenticated private mesh network.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="pricing.html" class="btn btn-primary btn-lg">Deploy Private Network</a>
+        <a href="docs.html" class="btn btn-secondary btn-lg">Read Network Architecture</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solutions Grid -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag-label">ENTERPRISE NETWORKING</span>
+        <h2 class="section-title">Scalable Private Network Solutions</h2>
+        <p class="section-desc">From small developer squads connecting staging databases to distributed global enterprises running cross-continental networks.</p>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-icon">🕸️</div>
+          <h3 class="card-title">Full-Mesh Peer Connectivity</h3>
+          <p class="card-text">Direct point-to-point V2Ray tunnels between your endpoints. Traffic travels through the shortest physical internet path with zero relay latency overhead.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🏢</div>
+          <h3 class="card-title">Site-to-Site Router Integration</h3>
+          <p class="card-text">Link entire office LANs and datacenter subnets using standard OpenWrt, pfSense, OPNsense, or MikroTik routers with effortless V2Ray peers.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3 class="card-title">Zero Trust Network Access (ZTNA)</h3>
+          <p class="card-text">Say goodbye to brittle perimeter firewalls. Every request is verified using mutual public-key cryptography with strict least-privilege subnet rules.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔀</div>
+          <h3 class="card-title">Intelligent Split-Tunneling</h3>
+          <p class="card-text">Route confidential internal traffic (e.g. <code>10.10.0.0/16</code>) through your private secure tunnel while letting general web traffic route locally for maximum speed.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h3 class="card-title">Anycast Edge Accelerators</h3>
+          <p class="card-text">Our edge network of Anycast BGP ingress points accelerates traffic routing over NetForge's private fiber backbone, slashing packet loss and jitter.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">📜</div>
+          <h3 class="card-title">Instant V2Ray Configs</h3>
+          <p class="card-text">Generate ready-to-use <code>config.json</code> mesh network configuration snippets directly from the Customer Portal with pre-allocated private IPs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual Architecture Snippet -->
+  <section class="section" style="background:rgba(255,255,255,0.01);">
+    <div class="container">
+      <div class="section-head">
+        <span class="tag-label">CONFIGURATION SIMPLICITY</span>
+        <h2 class="section-title">Clean, Transparent V2Ray Routing</h2>
+        <p class="section-desc">No complicated proprietary agents. Native V2Ray configurations that your DevOps team can inspect, automate, and deploy via Terraform or Ansible.</p>
+      </div>
+
+      <div class="container-narrow">
+        <div class="code-block">
+          <button class="code-copy-btn" onclick="copySnippet(this)">Copy</button>
+<pre><code># Sample NETFORGE Private Mesh Node Config
+[Interface]
+PrivateKey = aAAA...YOUR_PRIVATE_KEY...AAAA=
+Address = 10.10.4.15/24
+DNS = 10.10.0.1
+
+# Peer: NetForge Cloud Backbone Gateway
+[Peer]
+PublicKey = 7xYz...NETFORGE_GATEWAY_KEY...zYx7=
+Endpoint = nyc-mesh.netforge.internal:51820
+AllowedIPs = 10.10.0.0/16
+PersistentKeepalive = 25</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container container-narrow" style="text-align:center;">
+      <h2 style="font-size:2.2rem; margin-bottom:14px;">Connect Your Infrastructure Securely</h2>
+      <p style="color:var(--text-muted); margin-bottom:28px;">Protect critical internal services with high-performance V2Ray private networking.</p>
+      <a href="pricing.html" class="btn btn-primary btn-lg">Get Started</a>
+      <a href="docs.html" class="btn btn-secondary btn-lg" style="margin-left:12px;">Documentation</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-bio">
+          <div class="brand" style="margin-bottom:12px;">
+            <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+            <div class="brand-text">NET<span>FORGE</span></div>
+          </div>
+          <p>Zero-Trust mesh networking and private V2Ray tunnels.</p>
+          <div class="v2ray-notice">V2Ray® is a registered trademark of Jason A. Donenfeld.</div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="vpn.html">VPN Overview</a></li>
+            <li><a href="cloud.html">Cloud VPN</a></li>
+            <li><a href="networking.html">Mesh Networking</a></li>
+            <li><a href="purchase.html">Purchase Plans</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Infrastructure</h4>
+          <ul>
+            <li><a href="locations.html">Server Locations</a></li>
+            <li><a href="status.html">Network Status</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="docs.html">V2Ray Guides</a></li>
+            <li><a href="support.html">Help Desk</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li></li>
+            <li><a href="dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 NETFORGE Technologies. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

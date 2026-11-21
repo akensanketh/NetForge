@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE VPN | Purchase Membership & Download Config</title>
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Early defined modal controllers for instant responsiveness
+    window.openModal = function(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+    };
+    window.closeModal = function(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('active');
+    };
+    window.switchModalAuthTab = function(mode) {
+      const tabSignIn = document.getElementById('modalTabSignIn');
+      const tabRegister = document.getElementById('modalTabRegister');
+      const formSignIn = document.getElementById('modalSignInForm');
+      const formRegister = document.getElementById('modalRegisterForm');
+      const title = document.getElementById('authModalTitle');
+
+      if (mode === 'register') {
+        tabSignIn?.classList.remove('active');
+        tabRegister?.classList.add('active');
+        if (formSignIn) formSignIn.style.display = 'none';
+        if (formRegister) formRegister.style.display = 'block';
+        if (title) title.textContent = 'Create NETFORGE Account';
+      } else {
+        tabRegister?.classList.remove('active');
+        tabSignIn?.classList.add('active');
+        if (formRegister) formRegister.style.display = 'none';
+        if (formSignIn) formSignIn.style.display = 'block';
+        if (title) title.textContent = 'Sign In to NETFORGE';
+      }
+    };
+    window.openInlineAuthModal = function(mode) {
+      window.switchModalAuthTab(mode || 'signin');
+      window.openModal('inlineAuthModal');
+    };
+  </script>
+  <style>
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: start;
+      margin-top: 24px;
+    }
+    @media (max-width: 900px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .checkout-card {
+      background: #060a1e;
+      border: 1px solid rgba(0, 210, 255, 0.22);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    }
+    .step-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 210, 255, 0.1);
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--electric-cyan);
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+    .upload-zone {
+      border: 2px dashed rgba(0, 210, 255, 0.35);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      background: rgba(0, 210, 255, 0.02);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-top: 8px;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--electric-cyan);
+      background: rgba(0, 210, 255, 0.08);
+      box-shadow: var(--glow-electric);
+    }
+    .bank-box {
+      background: rgba(4, 7, 18, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin: 16px 0;
+      font-size: 0.88rem;
+    }
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .bank-row:last-child {
+      border-bottom: none;
+    }
+    .bank-label {
+      color: var(--text-dim);
+    }
+    .bank-val {
+      font-family: var(--font-mono);
+      color: #fff;
+      font-weight: 600;
+    }
+    .order-summary-box {
+      background: #080d22;
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 14px;
+      margin-top: 14px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .auth-banner-lock {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .auth-banner-success {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .plan-select-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .plan-select-item.selected, .plan-select-item:hover {
+      border-color: var(--electric-cyan);
+      background: rgba(0, 210, 255, 0.06);
+    }
+
+    /* Payment Method Tabs & Card Styles */
+    .payment-method-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 16px 0 24px 0;
+    }
+    @media (max-width: 600px) {
+      .payment-method-tabs {
+        grid-template-columns: 1fr;
+      }
+    }
+    .pay-method-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all var(--transition-fast);
+    }
+    .pay-method-card:hover {
+      border-color: rgba(0, 210, 255, 0.5);
+      background: rgba(0, 210, 255, 0.04);
+    }
+    .pay-method-card.active {
+      border-color: var(--electric-cyan);
+      background: rgba(0, 210, 255, 0.08);
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+    }
+    .pay-badge-instant {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--accent-emerald);
+      font-size: 0.70rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+    .pay-badge-manual {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #f59e0b;
+      font-size: 0.70rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+    .card-gateway-box {
+      background: linear-gradient(180deg, rgba(0, 210, 255, 0.06) 0%, rgba(4, 7, 18, 0.8) 100%);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 16px 0;
+    }
+    .card-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .error-target-box {
+      display: none;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: var(--radius-sm);
+      color: #f87171;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span></div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="vpn.html">VPN</a></li>
+        <li><a href="purchase.html" class="active">Purchase</a></li>
+        <li><a href="locations.html">Locations</a></li>
+        <li><a href="status.html">Status</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="btn btn-secondary btn-sm" id="navAuthBtn">Customer Portal</a>
+        <a href="purchase.html" class="btn btn-primary btn-sm">Get Started</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section" style="padding-bottom: 20px;">
+    <div class="hero-aura"></div>
+    <div class="container hero-content">
+      <div class="pill-badge">
+        <span class="status-indicator"></span> Instant V2Ray (VMess/VLESS) Provisioning &bull; 1Gbps Uplinks
+      </div>
+
+      <h1 class="hero-title">
+        Purchase NETFORGE VPN.<br>
+        <span class="gradient-heading">Card Payments & Instant Config Access.</span>
+      </h1>
+
+      <p class="hero-desc">
+        Pay securely with your credit/debit card via Payments.lk for instant automatic profile provisioning, or submit a local bank transfer.
+      </p>
+    </div>
+  </section>
+
+  <!-- Checkout Main Section -->
+  <section class="section" style="padding-top:20px; padding-bottom:60px;">
+    <div class="container">
+
+      <!-- Dynamic Auth Status Banner -->
+      <div id="authStatusBanner" class="auth-banner-lock">
+        <div style="font-size:1.8rem;">🔒</div>
+        <div style="flex-grow:1;">
+          <strong style="color:#f59e0b; font-size:1rem; display:block;">Sign In Recommended to Save Subscription</strong>
+          <span style="color:var(--text-secondary); font-size:0.86rem;">Sign in to link your high-speed VPN profile directly to your Customer Portal dashboard.</span>
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0; align-items:center; flex-wrap:wrap;">
+          <a href="login.html?tab=signin&redirect=purchase.html" class="btn btn-primary btn-sm" style="text-decoration:none;">Sign In</a>
+          <a href="login.html?tab=register&redirect=purchase.html" class="btn btn-secondary btn-sm" style="text-decoration:none;">Create Account</a>
+          <button type="button" class="btn btn-outline btn-sm" onclick="quickTesterLogin()" style="font-size:0.75rem; border-color:rgba(0,210,255,0.4); color:var(--electric-cyan);">⚡ Quick Sign-In</button>
+        </div>
+      </div>
+
+      <div class="checkout-grid">
+        
+        <!-- Left Column: Checkout Card -->
+        <div class="checkout-card" id="purchaseCard">
+          <form id="purchaseForm" onsubmit="handleBankSubmit(event)">
+            
+            <!-- Step 1: Select Plan -->
+            <div class="step-indicator">STEP 1: SELECT MEMBERSHIP PLAN</div>
+            <h3 style="font-size:1.2rem; color:#fff; margin-bottom:14px;">Chosen Membership Plan</h3>
+            
+            <div class="plan-select-item" onclick="selectPlan('1month', 12.99, '1-Month Standard', 'Only 1 Device Simultaneously', 4200)">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <input type="radio" name="planChoice" id="plan1m" value="1month">
+                <div>
+                  <strong style="color:#fff; display:block;">1-Month Standard</strong>
+                  <span style="font-size:0.80rem; color:var(--text-dim);">Only 1 Device Simultaneously &bull; 1Gbps uplinks</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <strong style="color:var(--electric-cyan); font-size:1.1rem;">$12.99</strong>
+                <span style="font-size:0.75rem; color:var(--accent-emerald); display:block; font-weight:600;">Rs. 4,200 LKR</span>
+              </div>
+            </div>
+
+            <div class="plan-select-item selected" onclick="selectPlan('2year', 78.96, '2-Year Pro Shield', 'Unlimited Devices &bull; 75% OFF', 24500)">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <input type="radio" name="planChoice" id="plan2y" value="2year" checked>
+                <div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <strong style="color:#fff;">2-Year Pro Shield</strong>
+                    <span style="background:rgba(16,185,129,0.2); color:var(--accent-emerald); font-size:0.68rem; padding:2px 6px; border-radius:10px; font-weight:700;">SAVE 75%</span>
+                  </div>
+                  <span style="font-size:0.80rem; color:var(--text-dim);">Unlimited Devices &bull; Ultra-Fast (1Gbps uplinks)</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <strong style="color:var(--electric-cyan); font-size:1.1rem;">$78.96</strong>
+                <span style="font-size:0.75rem; color:var(--accent-emerald); display:block; font-weight:600;">Rs. 24,500 LKR</span>
+              </div>
+            </div>
+
+            <div class="plan-select-item" onclick="selectPlan('1year', 71.88, '1-Year Security', '10 Devices Simultaneously', 22500)">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <input type="radio" name="planChoice" id="plan1y" value="1year">
+                <div>
+                  <strong style="color:#fff; display:block;">1-Year Security</strong>
+                  <span style="font-size:0.80rem; color:var(--text-dim);">10 Devices Simultaneously &bull; 1Gbps uplinks</span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <strong style="color:var(--electric-cyan); font-size:1.1rem;">$71.88</strong>
+                <span style="font-size:0.75rem; color:var(--accent-emerald); display:block; font-weight:600;">Rs. 22,500 LKR</span>
+              </div>
+            </div>
+
+            <!-- Step 2: Account Details -->
+            <div style="margin-top:28px;">
+              <div class="step-indicator">STEP 2: ACCOUNT & RECIPIENT DETAILS</div>
+              <h3 style="font-size:1.2rem; color:#fff; margin-bottom:14px;">Account Information</h3>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">Full Name / Display Name</label>
+                  <input type="text" class="form-control" id="buyerName" required placeholder="e.g. Alex Turner" oninput="syncCardPayload()">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Account Email Address</label>
+                  <input type="email" class="form-control" id="buyerEmail" required placeholder="you@example.com" oninput="syncCardPayload()">
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">Target VPN Device</label>
+                  <select class="form-control" id="buyerDevice" onchange="syncCardPayload()">
+                    <option value="Windows-PC">Windows 10/11 (PC)</option>
+                    <option value="Android-Mobile">Android (Phone / Tablet)</option>
+                    <option value="macOS">macOS (MacBook / iMac)</option>
+                    <option value="Linux">Linux (wg-quick)</option>
+                    <option value="iOS">iPhone / iPad</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Preferred Gateway Cluster</label>
+                  <select class="form-control" id="buyerLocation" onchange="syncCardPayload()">
+                    <option value="us-nyc-01">🇺🇸 USA — New York (1Gbps uplinks &bull; 22ms)</option>
+                    <option value="us-lax-01">🇺🇸 USA — Los Angeles (1Gbps uplinks &bull; 38ms)</option>
+                    <option value="in-bom-01">🇮🇳 India — Mumbai (1Gbps uplinks &bull; 16ms)</option>
+                    <option value="in-blr-01">🇮🇳 India — Bangalore (1Gbps uplinks &bull; 20ms)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Payment Method Selection -->
+            <div style="margin-top:28px;">
+              <div class="step-indicator">STEP 3: CHOOSE PAYMENT METHOD</div>
+              <h3 style="font-size:1.2rem; color:#fff; margin-bottom:8px;">Select Payment Gateway</h3>
+
+              <!-- Payment Method Tabs -->
+              <div class="payment-method-tabs">
+                <div class="pay-method-card active" id="tabCardPay" onclick="switchPaymentMethod('card')">
+                  <div style="display:flex; align-items:center; gap:12px;">
+                    <span style="font-size:1.6rem;">💳</span>
+                    <div>
+                      <strong style="color:#fff; display:block; font-size:0.95rem;">Card Payment</strong>
+                      <span style="color:var(--text-dim); font-size:0.75rem;">Visa &bull; Mastercard &bull; LankaPay &bull; Amex</span>
+                    </div>
+                  </div>
+                  <span class="pay-badge-instant">⚡ INSTANT</span>
+                </div>
+
+                <div class="pay-method-card" id="tabBankPay" onclick="switchPaymentMethod('bank')">
+                  <div style="display:flex; align-items:center; gap:12px;">
+                    <span style="font-size:1.6rem;">🏦</span>
+                    <div>
+                      <strong style="color:#fff; display:block; font-size:0.95rem;">Bank Transfer</strong>
+                      <span style="color:var(--text-dim); font-size:0.75rem;">Manual Bank Slip Upload</span>
+                    </div>
+                  </div>
+                  <span class="pay-badge-manual">MANUAL</span>
+                </div>
+              </div>
+
+              <!-- Card Payment Section (Payments.lk) -->
+              <div id="cardPaymentSection">
+                <div class="card-gateway-box">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                    <strong style="color:#fff; font-size:1.05rem;">Payments.lk Secure Card Checkout</strong>
+                    <span style="font-size:0.75rem; color:var(--electric-cyan); font-family:var(--font-mono); background:rgba(0,210,255,0.1); padding:2px 8px; border-radius:4px;">TEST MODE READY</span>
+                  </div>
+
+                  <p style="color:var(--text-secondary); font-size:0.86rem; margin:0 0 12px 0; line-height:1.5;">
+                    Complete payment securely on Payments.lk's hosted checkout page. Your credit/debit card data is processed directly via PCI-DSS Level 1 certified infrastructure.
+                  </p>
+
+                  <div class="card-badges">
+                    <span class="card-pill">💳 Visa</span>
+                    <span class="card-pill">💳 MasterCard</span>
+                    <span class="card-pill">🇱🇰 LankaPay</span>
+                    <span class="card-pill">💳 American Express</span>
+                  </div>
+
+                  <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:var(--radius-sm); padding:10px 14px; font-size:0.82rem; color:var(--accent-emerald); display:flex; align-items:center; gap:8px;">
+                    <span>⚡</span>
+                    <span><strong>Instant Activation:</strong> Your V2Ray config file and VMess QR code unlock immediately upon checkout completion.</span>
+                  </div>
+                </div>
+
+                <!-- Payments.lk Pay Button -->
+                <button type="button" class="btn btn-primary btn-full btn-lg" id="payWithCardBtn"
+                        data-payments-lk-checkout="create-checkout.php"
+                        data-payments-lk-body='{"plan":"2year"}'
+                        data-payments-lk-error-target="#cardPaymentError">
+                  <span id="cardPayBtnLabel">💳 Pay Rs. 24,500 with Card & Get Instant Access &rarr;</span>
+                </button>
+
+                <!-- Error Message Target for Payments.lk -->
+                <div id="cardPaymentError" class="error-target-box"></div>
+
+                <span style="font-size:0.76rem; color:var(--text-dim); display:block; text-align:center; margin-top:10px;">
+                  🔒 256-Bit TLS End-to-End Encryption &bull; Powered by Payments.lk &bull; 30-Day Money-Back Guarantee
+                </span>
+              </div>
+
+              <!-- Bank Transfer Section (Preserved) -->
+              <div id="bankPaymentSection" style="display:none;">
+                <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:14px;">
+                  Transfer the exact order amount to our official corporate account below and attach your transfer receipt:
+                </p>
+
+                <!-- Bank Account Details Card -->
+                <div class="bank-box">
+                  <div class="bank-row">
+                    <span class="bank-label">Beneficiary Name</span>
+                    <span class="bank-val" id="dispBeneficiary">NETFORGE Network Technologies Ltd.</span>
+                  </div>
+                  <div class="bank-row">
+                    <span class="bank-label">Bank Name</span>
+                    <span class="bank-val" id="dispBankName">Global Digital Commerce Bank</span>
+                  </div>
+                  <div class="bank-row">
+                    <span class="bank-label">Account Number</span>
+                    <span class="bank-val" id="dispAccountNum" style="letter-spacing:1px; color:var(--electric-cyan);">4092-8821-9014-5520</span>
+                  </div>
+                  <div class="bank-row">
+                    <span class="bank-label">Routing / IFSC / SWIFT</span>
+                    <span class="bank-val" id="dispSwift">NFGBINBB092</span>
+                  </div>
+                  <div class="bank-row">
+                    <span class="bank-label">Transfer Reference</span>
+                    <span class="bank-val" id="bankRefCode" style="color:var(--accent-emerald);">NF-PUR-8921</span>
+                  </div>
+                </div>
+
+                <!-- Bill / Transfer Receipt Upload Box -->
+                <div class="form-group" style="margin-top:18px;">
+                  <label class="form-label">Upload Transfer Bill / Payment Receipt Screenshot (PDF, PNG, JPG)</label>
+                  <div class="upload-zone" id="uploadDropZone" onclick="document.getElementById('billFile').click()">
+                    <div style="font-size:2.2rem; margin-bottom:6px;">🧾</div>
+                    <strong style="color:#fff; font-size:0.95rem; display:block;" id="uploadTitle">Click or Drag & Drop Payment Bill / Receipt Here</strong>
+                    <span style="font-size:0.78rem; color:var(--text-dim);" id="uploadSubtitle">Supports PDF, PNG, JPG or HEIC (Max 15MB)</span>
+                    <input type="file" id="billFile" accept="image/*,.pdf" style="display:none;" onchange="handleFileSelected(event)">
+                  </div>
+                  <div id="fileUploadStatus" style="display:none; margin-top:10px; font-size:0.85rem; color:var(--accent-emerald); font-weight:600;"></div>
+                </div>
+
+                <div class="form-group" style="margin-top:16px;">
+                  <label class="form-label">Bank Transaction ID / UTR / Reference Number</label>
+                  <input type="text" class="form-control" id="transactionRef" placeholder="e.g. UTR492810482019 or TXN-984210">
+                </div>
+
+                <div style="margin-top:20px;">
+                  <button type="submit" class="btn btn-secondary btn-full btn-lg" id="submitBankOrderBtn">
+                    Confirm Bank Transfer & Submit Proof &rarr;
+                  </button>
+                  <span style="font-size:0.76rem; color:var(--text-dim); display:block; text-align:center; margin-top:10px;">
+                    Bank transfers require manual admin verification before VPN configuration is released.
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Right Column: Order Summary & Live Activation -->
+        <div style="display:flex; flex-direction:column; gap:24px;">
+          
+          <!-- Summary Box -->
+          <div class="order-summary-box">
+            <h3 style="font-size:1.2rem; color:#fff; margin-bottom:18px; border-bottom:1px solid var(--border-subtle); padding-bottom:12px;">
+              Order Summary
+            </h3>
+
+            <div class="summary-line">
+              <span id="sumPlanName">2-Year Pro Shield</span>
+              <span id="sumPlanPrice" style="color:#fff; font-weight:600;">$78.96 (Rs. 24,500)</span>
+            </div>
+
+            <div class="summary-line">
+              <span>Throughput Speed</span>
+              <span style="color:var(--electric-cyan); font-weight:600;">1Gbps uplinks</span>
+            </div>
+
+            <div class="summary-line">
+              <span>Device Capacity</span>
+              <span id="sumDeviceCap" style="color:#fff;">Unlimited</span>
+            </div>
+
+            <div class="summary-line">
+              <span>Jurisdictions</span>
+              <span style="color:#fff;">USA & India Fleet</span>
+            </div>
+
+            <div class="summary-line">
+              <span>Selected Gateway</span>
+              <span style="color:var(--accent-emerald); font-weight:600;" id="sumGatewayName">Payments.lk (Card)</span>
+            </div>
+
+            <div class="summary-line">
+              <span>Setup & Keypair Fee</span>
+              <span style="color:var(--accent-emerald); font-weight:600;">$0.00 (FREE)</span>
+            </div>
+
+            <div class="summary-total">
+              <span>Total Due</span>
+              <div style="text-align:right;">
+                <div style="color:var(--electric-cyan);" id="sumTotal">$78.96</div>
+                <div style="color:var(--accent-emerald); font-size:0.82rem; font-weight:600;" id="sumTotalLkr">Rs. 24,500 LKR</div>
+              </div>
+            </div>
+            
+            <div style="margin-top:18px; font-size:0.78rem; color:var(--text-dim); line-height:1.5;">
+              Every plan includes a 30-day money-back satisfaction guarantee.
+            </div>
+          </div>
+
+          <!-- Card Payment Instant Activation Card (Shown when returning from Payments.lk) -->
+          <div class="checkout-card" id="paymentCardSuccessCard" style="display:none; border-color:var(--accent-emerald); background:linear-gradient(180deg, rgba(16,185,129,0.12) 0%, #060a1e 40%); box-shadow: 0 0 35px rgba(16, 185, 129, 0.25);">
+            <div style="text-align:center; margin-bottom:20px;">
+              <div style="font-size:3rem; margin-bottom:8px;">⚡</div>
+              <h3 style="font-size:1.35rem; color:#fff; font-weight:800;">Card Payment Verified!</h3>
+              <div style="display:inline-block; margin-top:8px; padding:4px 14px; background:rgba(16,185,129,0.2); border:1px solid var(--accent-emerald); border-radius:20px; color:var(--accent-emerald); font-weight:700; font-size:0.80rem; letter-spacing:0.5px;">
+                STATUS: ACTIVE & PROVISIONED
+              </div>
+              <p style="color:var(--text-secondary); font-size:0.88rem; margin-top:14px; line-height:1.6;">
+                Your card payment has been confirmed via <strong>Payments.lk</strong>. Your high-speed 1Gbps V2Ray VPN profile is generated and ready to download immediately.
+              </p>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:16px; margin-bottom:20px; font-size:0.85rem;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Order Reference:</span>
+                <code style="color:var(--electric-cyan); font-weight:700;" id="successOrderRef">#NF-ORD-8421</code>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Selected Plan:</span>
+                <span style="color:#fff; font-weight:600;" id="successPlanName">2-Year Pro Shield</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Amount Settled:</span>
+                <span style="color:var(--accent-emerald); font-weight:700;" id="successAmount">$78.96 (Rs. 24,500)</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--text-dim);">Payment Gateway:</span>
+                <span style="color:#fff; font-size:0.82rem; font-weight:600;">Payments.lk (Card Checkout)</span>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:18px;">
+              <button type="button" class="btn btn-primary btn-full btn-lg" onclick="triggerDirectVpnDownload()">
+                📥 Download V2Ray Config (.json)
+              </button>
+              <button type="button" class="btn btn-secondary btn-full" onclick="copyVmessLink()">
+                📋 Copy vmess:// Link
+              </button>
+              <button type="button" class="btn btn-outline btn-full" onclick="openModal('qrCodeModal')">
+                📱 Scan QR Code with Phone
+              </button>
+            </div>
+
+            <a href="dashboard.html" class="btn btn-primary btn-full">
+              Open Customer Portal Dashboard &rarr;
+            </a>
+          </div>
+
+          <!-- Post-Payment Admin Verification Card (For Bank Transfers) -->
+          <div class="checkout-card" id="paymentPendingApprovalCard" style="display:none; border-color:#f59e0b; background:linear-gradient(180deg, rgba(245,158,11,0.08) 0%, #060a1e 40%); box-shadow: 0 0 35px rgba(245, 158, 11, 0.2);">
+            <div style="text-align:center; margin-bottom:20px;">
+              <div style="font-size:3rem; margin-bottom:8px;">⏳</div>
+              <h3 style="font-size:1.35rem; color:#fff; font-weight:800;">Payment Receipt Submitted</h3>
+              <div style="display:inline-block; margin-top:8px; padding:4px 14px; background:rgba(245,158,11,0.2); border:1px solid #f59e0b; border-radius:20px; color:#f59e0b; font-weight:700; font-size:0.80rem; letter-spacing:0.5px;">
+                STATUS: PENDING ADMIN APPROVAL
+              </div>
+              <p style="color:var(--text-secondary); font-size:0.88rem; margin-top:14px; line-height:1.6;">
+                Your bank transfer proof and transaction reference have been received. An administrator will verify the funds against our bank statement before activating your V2Ray VPN profile.
+              </p>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:16px; margin-bottom:20px; font-size:0.85rem;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Order Reference:</span>
+                <code style="color:var(--electric-cyan); font-weight:700;" id="pendingOrderRef">#NF-ORD-8421</code>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Selected Plan:</span>
+                <span style="color:#fff; font-weight:600;" id="pendingPlanName">2-Year Pro Shield</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Amount Due:</span>
+                <span style="color:var(--electric-cyan); font-weight:700;" id="pendingAmount">$78.96</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Bank Reference / UTR:</span>
+                <code style="color:#fff;" id="pendingTxRef">TXN-984214</code>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--text-dim);">Receipt Attachment:</span>
+                <span style="color:#fff; font-size:0.80rem;" id="pendingReceiptName">receipt.jpg</span>
+              </div>
+            </div>
+
+            <div style="background:rgba(0,210,255,0.05); border:1px solid var(--border-glow); border-radius:var(--radius-sm); padding:14px; margin-bottom:20px; font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">
+              🔒 <strong>Verification Timeline:</strong><br>
+              Manual bank reconciliation usually takes <strong>15–30 minutes</strong> during banking hours. Once approved, your V2Ray config file and VMess QR code will unlock in your Customer Portal.
+            </div>
+
+            <a href="dashboard.html" class="btn btn-primary btn-full btn-lg">
+              Open Customer Portal Dashboard &rarr;
+            </a>
+          </div>
+
+          <!-- Security Assurance Card -->
+          <div class="checkout-card" style="padding:24px;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+              <span style="font-size:1.4rem;">🛡️</span>
+              <strong style="color:#fff; font-size:0.95rem;">RAM-Only Volatile Security</strong>
+            </div>
+            <p style="font-size:0.84rem; color:var(--text-secondary); line-height:1.6; margin:0;">
+              Your V2Ray cryptographic keys and VMess UUIDs are generated locally. NETFORGE stores zero connection timestamps, browsing traffic, or DNS inquiries.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Inline Auth Modal -->
+  <div class="modal-overlay" id="inlineAuthModal" onclick="if(event.target===this) closeModal('inlineAuthModal')">
+    <div class="modal-content" style="max-width:480px; position:relative;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain; margin:0;">
+          <h3 style="color:#fff; font-size:1.25rem; margin:0;" id="authModalTitle">NETFORGE Account Access</h3>
+        </div>
+        <button type="button" style="background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer; line-height:1; padding:0 4px;" onclick="closeModal('inlineAuthModal')" aria-label="Close modal">&times;</button>
+      </div>
+
+      <p style="color:var(--text-secondary); font-size:0.86rem; margin-bottom:18px;">
+        Sign in or create a membership account to attach your VPN profile and download your configuration file.
+      </p>
+
+      <!-- Auth Switch Tabs -->
+      <div class="auth-tabs" id="modalAuthTabs">
+        <button type="button" class="auth-tab active" id="modalTabSignIn" onclick="switchModalAuthTab('signin')">Sign In</button>
+        <button type="button" class="auth-tab" id="modalTabRegister" onclick="switchModalAuthTab('register')">Create Account</button>
+      </div>
+
+      <!-- Sign In View -->
+      <form id="modalSignInForm" onsubmit="handleModalAuth(event, 'signin')">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="mSignInEmail" required placeholder="alex@netforge.user" value="tester@netforge.internal">
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label class="form-label" style="margin:0;">Master Password</label>
+            <span style="font-size:0.75rem; color:var(--electric-cyan);">Encrypted session</span>
+          </div>
+          <input type="password" class="form-control" id="mSignInPassword" required placeholder="••••••••••••" value="••••••••••••">
+        </div>
+
+        <div style="margin-top:22px; display:flex; justify-content:space-between; gap:12px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('inlineAuthModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex-grow:1;" id="mSignInSubmitBtn">Sign In & Continue &rarr;</button>
+        </div>
+      </form>
+
+      <!-- Register View -->
+      <form id="modalRegisterForm" style="display:none;" onsubmit="handleModalAuth(event, 'register')">
+        <div class="form-group">
+          <label class="form-label">Full Name / Display Name</label>
+          <input type="text" class="form-control" id="mRegName" required placeholder="Alex Turner" value="Alex Turner">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="mRegEmail" required placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Create Master Password</label>
+          <input type="password" class="form-control" id="mRegPassword" required placeholder="Min 12 characters" value="••••••••••••">
+        </div>
+
+        <div style="margin-top:22px; display:flex; justify-content:space-between; gap:12px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('inlineAuthModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex-grow:1;" id="mRegSubmitBtn">Create Account & Continue &rarr;</button>
+        </div>
+      </form>
+
+      <div style="text-align:center; margin-top:16px; font-size:0.80rem;">
+        <span style="color:var(--text-dim);">Prefer the full portal page? </span>
+        <a href="login.html?redirect=purchase.html" style="color:var(--electric-cyan); text-decoration:underline;">Open Full Login Page &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div class="modal-overlay" id="qrCodeModal">
+    <div class="modal-content" style="text-align:center;">
+      <h3 style="font-size:1.3rem; margin-bottom:8px; color:#fff;" id="qrDeviceTitle">Scan with V2Ray Mobile App</h3>
+      <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:20px;">
+        Open your V2Ray app (v2rayNG, Shadowrocket, Streisand) on iOS or Android, tap <strong>+ &rarr; Scan QR code</strong>, and scan below.
+      </p>
+
+      <div style="width:220px; height:220px; margin:0 auto 20px; background:#fff; border-radius:12px; padding:12px; display:flex; align-items:center; justify-content:center;">
+        <svg viewBox="0 0 100 100" width="100%" height="100%" style="display:block;">
+          <rect width="100" height="100" fill="#ffffff" />
+          <path d="M10 10 h25 v25 h-25 z M15 15 h15 v15 h-15 z M20 20 h5 v5 h-5 z" fill="#000000" />
+          <path d="M65 10 h25 v25 h-25 z M70 15 h15 v15 h-15 z M75 20 h5 v5 h-5 z" fill="#000000" />
+          <path d="M10 65 h25 v25 h-25 z M15 70 h15 v15 h-15 z M20 75 h5 v5 h-5 z" fill="#000000" />
+          <rect x="45" y="15" width="10" height="10" fill="#000" />
+          <rect x="40" y="30" width="5" height="15" fill="#000" />
+          <rect x="55" y="35" width="10" height="5" fill="#000" />
+          <rect x="45" y="55" width="15" height="15" fill="#000" />
+          <rect x="70" y="50" width="20" height="10" fill="#000" />
+          <rect x="75" y="70" width="15" height="15" fill="#000" />
+          <rect x="40" y="75" width="10" height="15" fill="#000" />
+        </svg>
+      </div>
+
+      <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); background:rgba(255,255,255,0.03); padding:8px; border-radius:6px; margin-bottom:20px;">
+        Endpoint: <span id="qrEndpointText">us-nyc-01.netforge.internal:51820</span> &bull; Port: <span id="qrPortText">443 / 2083</span>
+      </div>
+
+      <button type="button" class="btn btn-secondary btn-full" onclick="closeModal('qrCodeModal')">Done</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-bio">
+          <div class="brand" style="margin-bottom:12px;">
+            <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+            <div class="brand-text">NET<span>FORGE</span></div>
+          </div>
+          <p>Next-gen V2Ray proxy performance, zero ISP throttling, and diskless RAM privacy.</p>
+          <div class="v2ray-notice">V2Ray is an open-source network proxy platform designed to provide unrestricted, secure, and private internet access.</div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="vpn.html">VPN Overview</a></li>
+            <li><a href="purchase.html">Purchase Plans</a></li>
+            <li><a href="purchase.html">Card Checkout</a></li>
+            <li><a href="locations.html">USA & India Servers</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Infrastructure</h4>
+          <ul>
+            <li><a href="locations.html">Server Locations</a></li>
+            <li><a href="status.html">Network Status</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="dashboard.html">My Dashboard</a></li>
+            <li><a href="login.html">Sign In</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 NETFORGE Technologies. Payments processed securely via Payments.lk. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js?v=1.4"></script>
+  <!-- Payments.lk Official Pay Button Script -->
+  <script src="pay.js" defer></script>
+  <script src="https://payments.lk/js/pay.js" defer></script>
+
+  <script>
+    // Plans configuration
+    const plansConfig = {
+      '1month': { id: '1month', price: 12.99, lkr: 4200, name: '1-Month Standard', devices: 'Only 1 Device' },
+      '2year': { id: '2year', price: 78.96, lkr: 24500, name: '2-Year Pro Shield', devices: 'Unlimited Devices' },
+      '1year': { id: '1year', price: 71.88, lkr: 22500, name: '1-Year Security', devices: '10 Devices' }
+    };
+
+    let currentPlan = plansConfig['2year'];
+    let currentMethod = 'card';
+    let uploadedBillFile = null;
+    let uploadedBillDataUrl = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthStatus();
+      parseUrlPlan();
+      checkPaymentReturn();
+      setupDragDrop();
+      loadCustomBankSettings();
+      syncCardPayload();
+      bindCardButtonEvents();
+    });
+
+    // Switch between Card Payment and Bank Transfer
+    window.switchPaymentMethod = function(method) {
+      currentMethod = method;
+      const tabCard = document.getElementById('tabCardPay');
+      const tabBank = document.getElementById('tabBankPay');
+      const cardSec = document.getElementById('cardPaymentSection');
+      const bankSec = document.getElementById('bankPaymentSection');
+      const sumGateway = document.getElementById('sumGatewayName');
+
+      if (method === 'card') {
+        tabCard?.classList.add('active');
+        tabBank?.classList.remove('active');
+        if (cardSec) cardSec.style.display = 'block';
+        if (bankSec) bankSec.style.display = 'none';
+        if (sumGateway) sumGateway.textContent = 'Payments.lk (Card)';
+      } else {
+        tabBank?.classList.add('active');
+        tabCard?.classList.remove('active');
+        if (bankSec) bankSec.style.display = 'block';
+        if (cardSec) cardSec.style.display = 'none';
+        if (sumGateway) sumGateway.textContent = 'Direct Bank Transfer';
+      }
+    };
+
+    function selectPlan(id, price, name, devices, lkr) {
+      currentPlan = { id, price, name, devices, lkr: lkr || (id === '1month' ? 4200 : (id === '1year' ? 22500 : 24500)) };
+
+      document.querySelectorAll('.plan-select-item').forEach(item => item.classList.remove('selected'));
+      const radio = document.getElementById(id === '1month' ? 'plan1m' : (id === '1year' ? 'plan1y' : 'plan2y'));
+      if (radio) {
+        radio.checked = true;
+        radio.closest('.plan-select-item').classList.add('selected');
+      }
+
+      document.getElementById('sumPlanName').textContent = name;
+      document.getElementById('sumPlanPrice').textContent = `$${price.toFixed(2)} (Rs. ${currentPlan.lkr.toLocaleString()})`;
+      document.getElementById('sumDeviceCap').textContent = devices;
+      document.getElementById('sumTotal').textContent = `$${price.toFixed(2)}`;
+      document.getElementById('sumTotalLkr').textContent = `Rs. ${currentPlan.lkr.toLocaleString()} LKR`;
+
+      // Update Card Pay Button label
+      const cardLabel = document.getElementById('cardPayBtnLabel');
+      if (cardLabel) {
+        cardLabel.textContent = `💳 Pay Rs. ${currentPlan.lkr.toLocaleString()} with Card & Get Instant Access →`;
+      }
+
+      // Update transfer reference code for bank option
+      const refCode = 'NF-' + id.toUpperCase() + '-' + Math.floor(1000 + Math.random() * 9000);
+      const bankRefEl = document.getElementById('bankRefCode');
+      if (bankRefEl) bankRefEl.textContent = refCode;
+
+      syncCardPayload();
+    }
+
+    // Keep data-payments-lk-body synchronized with inputs
+    window.syncCardPayload = function() {
+      const buyerName = document.getElementById('buyerName')?.value.trim() || 'NETFORGE Member';
+      const buyerEmail = document.getElementById('buyerEmail')?.value.trim() || 'customer@netforge.internal';
+      const buyerDevice = document.getElementById('buyerDevice')?.value || 'Windows-PC';
+      const buyerLocation = document.getElementById('buyerLocation')?.value || 'us-nyc-01';
+      const payBtn = document.getElementById('payWithCardBtn');
+
+      if (payBtn) {
+        const bodyData = {
+          plan: currentPlan.id,
+          name: buyerName,
+          email: buyerEmail,
+          device: buyerDevice,
+          location: buyerLocation
+        };
+        payBtn.setAttribute('data-payments-lk-body', JSON.stringify(bodyData));
+      }
+    };
+
+    function bindCardButtonEvents() {
+      const payBtn = document.getElementById('payWithCardBtn');
+      if (!payBtn) return;
+
+      payBtn.addEventListener('payments-lk:redirect', (e) => {
+        const cardLabel = document.getElementById('cardPayBtnLabel');
+        if (cardLabel) cardLabel.textContent = 'Redirecting to Payments.lk Secure Checkout...';
+      });
+
+      payBtn.addEventListener('payments-lk:error', (e) => {
+        const errEl = document.getElementById('cardPaymentError');
+        if (errEl) {
+          errEl.textContent = e.detail?.message || 'The card payment could not be initiated. Please try again.';
+          errEl.style.display = 'block';
+        }
+      });
+    }
+
+    // Check if returning from Payments.lk checkout callback
+    function checkPaymentReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const paymentStatus = params.get('payment');
+      const orderRef = params.get('ref') || ('NF-ORD-' + Math.floor(100000 + Math.random() * 900000));
+      const planKey = params.get('plan') || '2year';
+      const planInfo = plansConfig[planKey] || plansConfig['2year'];
+
+      if (paymentStatus === 'success') {
+        document.getElementById('purchaseCard').style.display = 'none';
+        const successCard = document.getElementById('paymentCardSuccessCard');
+        if (successCard) {
+          successCard.style.display = 'block';
+          successCard.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('successOrderRef').textContent = '#' + orderRef;
+        document.getElementById('successPlanName').textContent = planInfo.name;
+        document.getElementById('successAmount').textContent = `$${planInfo.price.toFixed(2)} (Rs. ${planInfo.lkr.toLocaleString()})`;
+
+        // Save active subscription to local profile
+        let userProfile = {};
+        try {
+          userProfile = JSON.parse(localStorage.getItem('netforge_portal_user') || '{}');
+        } catch (e) {}
+
+        userProfile.subscription = planInfo.name + ' (Active)';
+        userProfile.order_id = orderRef;
+        userProfile.payment_status = 'paid';
+        userProfile.gateway = 'payments.lk';
+        userProfile.activeEndpoint = 'us-nyc-01.netforge.internal:51820';
+        localStorage.setItem('netforge_portal_user', JSON.stringify(userProfile));
+
+        // Sync order to Supabase
+        if (window.supabaseClient) {
+          try {
+            window.supabaseClient.from('orders').insert([{
+              order_id: orderRef,
+              user_email: userProfile.email || 'customer@netforge.internal',
+              buyer_name: userProfile.name || 'NETFORGE Member',
+              plan_id: planInfo.id,
+              plan_name: planInfo.name,
+              amount: planInfo.price,
+              transaction_ref: 'PAYMENTS-LK-' + orderRef,
+              bill_filename: 'Payments.lk Card Checkout (Instant)',
+              endpoint: 'us-nyc-01.netforge.internal:51820',
+              status: 'active',
+              created_at: new Date().toISOString()
+            }]).then(() => {
+              console.log('[Supabase]: Card payment order recorded successfully.');
+            }).catch(e => console.warn(e));
+          } catch (e) {}
+        }
+      } else if (paymentStatus === 'cancelled') {
+        const errEl = document.getElementById('cardPaymentError');
+        if (errEl) {
+          errEl.textContent = 'Card checkout was cancelled. You can review your plan and try again anytime.';
+          errEl.style.display = 'block';
+        }
+      }
+    }
+
+    function parseUrlPlan() {
+      const params = new URLSearchParams(window.location.search);
+      const planParam = params.get('plan');
+      if (planParam === '1month') {
+        selectPlan('1month', 12.99, '1-Month Standard', 'Only 1 Device Simultaneously', 4200);
+      } else if (planParam === '1year') {
+        selectPlan('1year', 71.88, '1-Year Security', '10 Devices Simultaneously', 22500);
+      } else if (planParam === '2year') {
+        selectPlan('2year', 78.96, '2-Year Pro Shield', 'Unlimited Devices', 24500);
+      }
+    }
+
+    function checkAuthStatus() {
+      const banner = document.getElementById('authStatusBanner');
+      const savedUser = localStorage.getItem('netforge_portal_user');
+      const buyerName = document.getElementById('buyerName');
+      const buyerEmail = document.getElementById('buyerEmail');
+      const navAuthBtn = document.getElementById('navAuthBtn');
+
+      if (savedUser) {
+        try {
+          const user = JSON.parse(savedUser);
+          if (banner) {
+            banner.className = 'auth-banner-success';
+            banner.innerHTML = `
+              <div style="font-size:1.8rem;">✅</div>
+              <div style="flex-grow:1;">
+                <strong style="color:var(--accent-emerald); font-size:1rem; display:block;">Signed In as ${user.name || user.email}</strong>
+                <span style="color:var(--text-secondary); font-size:0.86rem;">Account verified: ${user.email}. Your VPN config will be linked directly to your portal dashboard.</span>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="handleLogout(event)">Switch Account</button>
+            `;
+          }
+          if (buyerName && !buyerName.value) buyerName.value = user.name || 'Alex Turner';
+          if (buyerEmail && !buyerEmail.value) buyerEmail.value = user.email || 'tester@netforge.internal';
+          if (navAuthBtn) {
+            navAuthBtn.textContent = 'Dashboard';
+            navAuthBtn.href = 'dashboard.html';
+          }
+        } catch (e) {}
+      }
+    }
+
+    window.quickTesterLogin = function() {
+      const user = {
+        email: 'tester@netforge.internal',
+        name: 'Alex Turner',
+        role: 'Member'
+      };
+      localStorage.setItem('netforge_portal_user', JSON.stringify(user));
+      checkAuthStatus();
+      syncCardPayload();
+    };
+
+    window.handleModalAuth = function(e, type) {
+      e.preventDefault();
+      let email = '';
+      let name = '';
+
+      if (type === 'signin') {
+        email = document.getElementById('mSignInEmail')?.value.trim() || 'tester@netforge.internal';
+        name = email.split('@')[0];
+      } else {
+        email = document.getElementById('mRegEmail')?.value.trim() || 'newuser@netforge.internal';
+        name = document.getElementById('mRegName')?.value.trim() || email.split('@')[0];
+      }
+
+      const user = {
+        email,
+        name: name.charAt(0).toUpperCase() + name.slice(1),
+        role: 'Member'
+      };
+
+      localStorage.setItem('netforge_portal_user', JSON.stringify(user));
+      window.closeModal('inlineAuthModal');
+      checkAuthStatus();
+      syncCardPayload();
+    };
+
+    function loadCustomBankSettings() {
+      try {
+        const customBank = JSON.parse(localStorage.getItem('netforge_bank_settings') || '{}');
+        if (customBank.beneficiary) document.getElementById('dispBeneficiary').textContent = customBank.beneficiary;
+        if (customBank.bankName) document.getElementById('dispBankName').textContent = customBank.bankName;
+        if (customBank.accountNumber) document.getElementById('dispAccountNum').textContent = customBank.accountNumber;
+        if (customBank.swift) document.getElementById('dispSwift').textContent = customBank.swift;
+      } catch (e) {}
+    }
+
+    function setupDragDrop() {
+      const dropZone = document.getElementById('uploadDropZone');
+      if (!dropZone) return;
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+          handleFile(files[0]);
+        }
+      });
+    }
+
+    function handleFileSelected(event) {
+      const file = event.target.files[0];
+      if (file) handleFile(file);
+    }
+
+    function handleFile(file) {
+      uploadedBillFile = file;
+      const statusEl = document.getElementById('fileUploadStatus');
+      const titleEl = document.getElementById('uploadTitle');
+      const subtitleEl = document.getElementById('uploadSubtitle');
+
+      titleEl.textContent = `Receipt Attached: ${file.name}`;
+      subtitleEl.textContent = `File size: ${(file.size / 1024).toFixed(1)} KB - Ready for verification`;
+      if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = `✓ Proof of Bank Transfer attached: <strong>${file.name}</strong>`;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedBillDataUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleBankSubmit(e) {
+      e.preventDefault();
+
+      if (!uploadedBillFile) {
+        alert('Please upload your bank transfer bill or receipt screenshot to verify your payment.');
+        document.getElementById('uploadDropZone').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      const buyerName = document.getElementById('buyerName').value.trim();
+      const buyerEmail = document.getElementById('buyerEmail').value.trim();
+      const buyerLocation = document.getElementById('buyerLocation').value;
+      const transactionRef = document.getElementById('transactionRef').value.trim();
+      const submitBtn = document.getElementById('submitBankOrderBtn');
+      const orderId = 'NF-ORD-' + Math.floor(100000 + Math.random() * 900000);
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Transmitting Payment Proof to Admin...';
+
+      setTimeout(async () => {
+        const serverEndpoint = buyerLocation === 'in-bom-01' ? 'in-bom-01.netforge.internal:51820' : 
+                               (buyerLocation === 'in-blr-01' ? 'in-blr-01.netforge.internal:51820' : 
+                               (buyerLocation === 'us-lax-01' ? 'us-lax-01.netforge.internal:51820' : 'us-nyc-01.netforge.internal:51820'));
+
+        const newOrder = {
+          order_id: orderId,
+          user_email: buyerEmail,
+          buyer_name: buyerName,
+          plan_id: currentPlan.id,
+          plan_name: currentPlan.name,
+          amount: currentPlan.price,
+          transaction_ref: transactionRef || ('MANUAL-' + orderId),
+          bill_filename: uploadedBillFile.name,
+          bill_data: uploadedBillDataUrl || '',
+          endpoint: serverEndpoint,
+          status: 'pending_admin_approval',
+          created_at: new Date().toISOString()
+        };
+
+        if (window.supabaseClient) {
+          try {
+            await window.supabaseClient.from('orders').insert([newOrder]);
+          } catch (err) {
+            console.warn('[Supabase Order Sync]:', err);
+          }
+        }
+
+        let allOrders = [];
+        try {
+          allOrders = JSON.parse(localStorage.getItem('netforge_all_orders') || '[]');
+        } catch (err) {}
+        allOrders.unshift(newOrder);
+        localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+
+        const existingData = JSON.parse(localStorage.getItem('netforge_portal_user') || '{}');
+        existingData.subscription = currentPlan.name + ' (Pending Admin Approval)';
+        existingData.order_id = orderId;
+        existingData.payment_status = 'pending_admin_approval';
+        existingData.transactionRef = transactionRef;
+        existingData.billFileName = uploadedBillFile.name;
+        existingData.activeEndpoint = serverEndpoint;
+        existingData.active_order = newOrder;
+        localStorage.setItem('netforge_portal_user', JSON.stringify(existingData));
+
+        document.getElementById('pendingOrderRef').textContent = '#' + orderId;
+        document.getElementById('pendingPlanName').textContent = currentPlan.name;
+        document.getElementById('pendingAmount').textContent = `$${currentPlan.price.toFixed(2)}`;
+        document.getElementById('pendingTxRef').textContent = transactionRef || 'Submitted';
+        document.getElementById('pendingReceiptName').textContent = uploadedBillFile.name;
+
+        document.getElementById('purchaseCard').style.display = 'none';
+        document.getElementById('paymentPendingApprovalCard').style.display = 'block';
+        document.getElementById('paymentPendingApprovalCard').scrollIntoView({ behavior: 'smooth' });
+      }, 700);
+    }
+
+    window.triggerDirectVpnDownload = function() {
+      const buyerEmail = document.getElementById('buyerEmail')?.value || 'customer@netforge.internal';
+      const endpoint = 'us-nyc-01.netforge.internal:51820';
+
+      const confContent = `[Interface]
+# NETFORGE VPN Configuration - ${currentPlan.name}
+# Client: ${buyerEmail}
+# Throughput: 1Gbps uplinks (Reality VMess/VLESS)
+PrivateKey = eGFtYWRldmVsZXh2cG5rZXlmb3JuZXRmb3JnZTIwMjY=
+Address = 10.10.4.52/32, fd00:netforge::52/128
+DNS = 1.1.1.1, 8.8.8.8
+
+[Peer]
+# NETFORGE High-Speed Bare-Metal Cluster (USA & India Fleet)
+PublicKey = 7xYzNetForgeNodeClusterUSAIndiaBareMetal1GbpsPubkey=
+Endpoint = ${endpoint}
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25
+`;
+
+      const blob = new Blob([confContent], { type: 'application/json;charset=utf-8' });
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `netforge-${currentPlan.id}-v2ray.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(downloadUrl);
+    };
+
+    window.copyVmessLink = function() {
+      const vmessUri = "vmess://eyJhZGQiOiIxMzIuMjI2LjE5MC4zNCIsImFpZCI6IjAiLCJhbHBuIjoiIiwiaG9zdCI6Ind3dy55b3V0dWJlLmNvbSIsImlkIjoiOTg0ZTk1MTMtNDFjYS00ZTFmLThkNzUtZWRhMDZkOTlhODZkIiwibmV0IjoidGNwIiwicGF0aCI6IiIsInBvcnQiOiIyMDgzIiwicHMiOiJORVRGT1JHRS1VU0EtWVQtUkVBTElUWSIsInNjeSI6ImF1dG8iLCJzbmkiOiJ3d3cueW91dHViZS5jb20iLCJ0bHMiOiJyZWFsaXR5IiwidHlwZSI6Im5vbmUifQ==";
+      navigator.clipboard.writeText(vmessUri).then(() => {
+        alert('V2Ray connection URI copied to clipboard!\nPaste it into v2rayNG, Streisand, or NetMod.');
+      }).catch(() => {
+        prompt('Copy your V2Ray VMess connection link:', vmessUri);
+      });
+    };
+  </script>
+</body>
+</html>

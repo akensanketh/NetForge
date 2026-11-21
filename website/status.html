@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE Status | Real-Time Global Network Telemetry</title>
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span></div>
+      </a>
+
+                  <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="vpn.html">VPN</a></li>
+        <li><a href="purchase.html">Purchase</a></li>
+        <li><a href="locations.html">Locations</a></li>
+        <li><a href="status.html" class="active">Status</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html?tab=register" class="btn btn-primary btn-sm">Get Started</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section" style="padding-bottom: 20px;">
+    <div class="hero-aura"></div>
+    <div class="container hero-content">
+      <div class="pill-badge">
+        <span class="status-indicator"></span> Real-Time Infrastructure Diagnostics
+      </div>
+
+      <h1 class="hero-title">
+        Network Status & Health.<br>
+        <span class="gradient-heading">100% Operational Transparency.</span>
+      </h1>
+
+      <p class="hero-desc">
+        Live telemetry and historical uptime across our global fleet of V2Ray stealth nodes, Anycast recursive resolvers, and cloud gateways.
+      </p>
+    </div>
+  </section>
+
+  <!-- Status Content -->
+  <section class="section" style="padding-top:20px;">
+    <div class="container container-narrow">
+
+      <!-- Overall Status Banner -->
+      <div class="status-banner">
+        <div class="status-left">
+          <div class="status-badge-lg">✓</div>
+          <div>
+            <h3 style="font-size:1.3rem; color:#fff; margin-bottom:4px;">All Systems Operational</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem;">V2Ray stealth fleet running with 99.994% uptime over the past 90 days.</p>
+          </div>
+        </div>
+        <span style="font-family:var(--font-mono); font-size:0.85rem; color:var(--accent-emerald);">UPDATED LIVE</span>
+      </div>
+
+      <!-- Core Services List -->
+      <h3 style="font-size:1.3rem; margin-bottom:16px;">Core Infrastructure Services</h3>
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>System Service</th>
+              <th>Status</th>
+              <th>Past 30 Days Uptime</th>
+              <th>Throughput Health</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>V2Ray USA & India Gateways</strong></td>
+              <td><span style="color:var(--accent-emerald);">● Operational</span></td>
+              <td>99.99%</td>
+              <td>Optimal (Avg 1.2% packet jitter)</td>
+            </tr>
+            <tr>
+              <td><strong>NetForge Shield Anycast DNS</strong></td>
+              <td><span style="color:var(--accent-emerald);">● Operational</span></td>
+              <td>100.00%</td>
+              <td>Optimal (&lt; 8ms resolution)</td>
+            </tr>
+            <tr>
+              <td><strong>Multi-Hop Cascades & Obfuscation</strong></td>
+              <td><span style="color:var(--accent-emerald);">● Operational</span></td>
+              <td>99.98%</td>
+              <td>Optimal</td>
+            </tr>
+            <tr>
+              <td><strong>Customer Portal & Config Engine</strong></td>
+              <td><span style="color:var(--accent-emerald);">● Operational</span></td>
+              <td>100.00%</td>
+              <td>Optimal</td>
+            </tr>
+            <tr>
+              <td><strong>Dedicated Cloud VPC Peering</strong></td>
+              <td><span style="color:var(--accent-emerald);">● Operational</span></td>
+              <td>99.99%</td>
+              <td>Optimal</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Regional Node Health -->
+      <h3 style="font-size:1.3rem; margin:36px 0 16px;">Regional Node Cluster Diagnostics</h3>
+      <div class="cards-grid" style="grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));">
+        <div class="card" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <strong style="color:#fff;">🇪🇺 Europe Cluster</strong>
+            <span style="color:var(--accent-emerald); font-size:0.85rem;">99.99%</span>
+          </div>
+          <p style="color:var(--text-dim); font-size:0.82rem; margin-bottom:8px;">1,840 Nodes &bull; Avg Latency 14ms</p>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;">
+            <div style="width:99%; height:100%; background:var(--accent-emerald);"></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <strong style="color:#fff;">🇺🇸 North America Cluster</strong>
+            <span style="color:var(--accent-emerald); font-size:0.85rem;">99.99%</span>
+          </div>
+          <p style="color:var(--text-dim); font-size:0.82rem; margin-bottom:8px;">1,920 Nodes &bull; Avg Latency 18ms</p>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;">
+            <div style="width:99%; height:100%; background:var(--accent-emerald);"></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <strong style="color:#fff;">🇯🇵 Asia-Pacific Cluster</strong>
+            <span style="color:var(--accent-emerald); font-size:0.85rem;">99.98%</span>
+          </div>
+          <p style="color:var(--text-dim); font-size:0.82rem; margin-bottom:8px;">1,250 Nodes &bull; Avg Latency 28ms</p>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;">
+            <div style="width:99%; height:100%; background:var(--accent-emerald);"></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <strong style="color:#fff;">🇦🇺 Oceania & LatAm</strong>
+            <span style="color:var(--accent-emerald); font-size:0.85rem;">100.0%</span>
+          </div>
+          <p style="color:var(--text-dim); font-size:0.82rem; margin-bottom:8px;">890 Nodes &bull; Avg Latency 34ms</p>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden;">
+            <div style="width:100%; height:100%; background:var(--accent-emerald);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Past Incident Log -->
+      <h3 style="font-size:1.3rem; margin:36px 0 16px;">Incident History</h3>
+      <div style="background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:24px;">
+        <div style="border-left:2px solid var(--accent-emerald); padding-left:16px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-dim); margin-bottom:4px;">
+            <span>Completed Scheduled Maintenance</span>
+            <span>November 2, 2026</span>
+          </div>
+          <h4 style="color:#fff; font-size:1rem; margin-bottom:6px;">Frankfurt & London Core Switch Firmware Update</h4>
+          <p style="color:var(--text-muted); font-size:0.88rem;">Seamless BGP traffic draining was executed without dropped client V2Ray sessions. Upgraded upstream uplink capacity to 40Gbps.</p>
+        </div>
+
+        <div style="border-left:2px solid var(--accent-emerald); padding-left:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-dim); margin-bottom:4px;">
+            <span>Resolved Routing Disruption</span>
+            <span>October 19, 2026</span>
+          </div>
+          <h4 style="color:#fff; font-size:1rem; margin-bottom:6px;">Upstream Fiber Cut in Transit Provider (Tokyo Node)</h4>
+          <p style="color:var(--text-muted); font-size:0.88rem;">Automatic failover re-routed Asian traffic via Osaka and Seoul paths within 800 milliseconds. Normal transit restored.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-bio">
+          <div class="brand" style="margin-bottom:12px;">
+            <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+            <div class="brand-text">NET<span>FORGE</span></div>
+          </div>
+          <p>Real-time infrastructure health and uptime transparency.</p>
+          <div class="protocol-notice">V2Ray is an open-source network proxy platform designed to provide unrestricted, secure, and private internet access.</div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="vpn.html">VPN Overview</a></li>
+            <li><a href="purchase.html">Purchase Plans</a></li>
+            <li><a href="purchase.html">Purchase VPN</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Infrastructure</h4>
+          <ul>
+            <li><a href="locations.html">Server Locations</a></li>
+            <li><a href="status.html">Network Status</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="docs.html">V2Ray Guides</a></li>
+            <li><a href="support.html">Help Desk</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li></li>
+            <li><a href="dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 NETFORGE Technologies. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

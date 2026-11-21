@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE VPN | Customer Portal Login</title>
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span></div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-secondary btn-sm">&larr; Back to Website</a>
+        <a href="index.html#early-access" class="btn btn-primary btn-sm">Early Access (First 20 Members)</a>
+      </div>
+    </header>
+  </div>
+
+  <!-- Auth Container -->
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div style="text-align:center; margin-bottom:24px;">
+        <img src="logo-square.png" alt="NETFORGE" style="margin:0 auto 14px; width:44px; height:44px; border-radius:8px; object-fit:contain; display:block;">
+        <h2 style="font-size:1.6rem; font-weight:800; color:#fff;">Customer Portal</h2>
+        <p style="color:var(--text-secondary); font-size:0.88rem; margin-top:4px;">Manage your V2Ray devices, configs, and access credentials</p>
+      </div>
+
+      <!-- Auth Switch Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabSignInBtn">Sign In</button>
+        <button class="auth-tab" id="tabRegisterBtn">Create Account</button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="signInForm" onsubmit="handlePortalAuth(event, 'signin')">
+        <div class="form-group">
+          <label class="form-label">Email or Account ID</label>
+          <input type="email" class="form-control" required placeholder="alex@netforge.user" id="signInEmail" value="tester@netforge.internal">
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label class="form-label" style="margin:0;">Master Password</label>
+            <a href="#" style="font-size:0.80rem; color:var(--electric-cyan);" onclick="alert('Password reset link sent to registered email.')">Forgot?</a>
+          </div>
+          <input type="password" class="form-control" required placeholder="••••••••••••" id="signInPassword" value="••••••••••••">
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:24px; font-size:0.86rem; color:var(--text-secondary);">
+          <input type="checkbox" id="rememberMe" checked>
+          <label for="rememberMe">Remember session on this device</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg">Sign In to Dashboard &rarr;</button>
+
+        <div style="margin-top:20px; text-align:center; font-size:0.80rem; color:var(--text-dim); background:rgba(0,210,255,0.06); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+          ℹ️ Early tester credentials pre-filled. Click above to open the customer portal.
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" style="display:none;" onsubmit="handlePortalAuth(event, 'register')">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" placeholder="Alex Turner" id="regName">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" required placeholder="you@example.com" id="regEmail">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Choose Master Password</label>
+          <input type="password" class="form-control" required placeholder="Min 12 characters" id="regPassword">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Primary Testing Device</label>
+          <select class="form-control" id="regPlatform">
+            <option value="Both">Early Tester (First 20 Members)</option>
+            <option value="Windows" disabled>Windows (Under Development)</option>
+            <option value="Android" disabled>Android (Under Development)</option>
+          </select>
+        </div>
+
+        <div style="font-size:0.80rem; color:var(--text-dim); margin-bottom:20px; line-height:1.5;">
+          By registering, you agree to participate in the NETFORGE early validation test under our zero-logs security policy.
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg">Register & Enter Portal &rarr;</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Minimal Footer -->
+  <footer class="footer" style="padding:24px 0; border-top:1px solid var(--border-subtle);">
+    <div class="container" style="text-align:center; font-size:0.80rem; color:var(--text-dim);">
+      &copy; 2026 NETFORGE VPN. V2Ray-Compatible Customer Dashboard.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  <script>
+    (function() {
+      function applyTabFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const tab = (params.get('tab') || '').toLowerCase();
+        const hash = (window.location.hash || '').toLowerCase();
+        if (tab === 'register' || tab === 'signup' || hash === '#register' || hash === '#signup') {
+          const regBtn = document.getElementById('tabRegisterBtn');
+          const signBtn = document.getElementById('tabSignInBtn');
+          const regForm = document.getElementById('registerForm');
+          const signForm = document.getElementById('signInForm');
+          if (regBtn && signBtn && regForm && signForm) {
+            regBtn.classList.add('active');
+            signBtn.classList.remove('active');
+            regForm.style.display = 'block';
+            signForm.style.display = 'none';
+          }
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyTabFromUrl);
+      } else {
+        applyTabFromUrl();
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE Support | 24/7 Dedicated Technical Assistance</title>
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span></div>
+      </a>
+
+                  <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="vpn.html">VPN</a></li>
+        <li><a href="purchase.html">Purchase</a></li>
+        <li><a href="locations.html">Locations</a></li>
+        <li><a href="status.html">Status</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="support.html" class="active">Support</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html?tab=register" class="btn btn-primary btn-sm">Get Started</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section" style="padding-bottom: 20px;">
+    <div class="hero-aura"></div>
+    <div class="container hero-content">
+      <div class="pill-badge">
+        <span class="status-indicator"></span> Average Response Time: &lt; 8 Minutes
+      </div>
+
+      <h1 class="hero-title">
+        Customer Support.<br>
+        <span class="gradient-heading">Expert Engineers, Never Chatbots.</span>
+      </h1>
+
+      <p class="hero-desc">
+        Have questions regarding your V2Ray configuration, billing, or network routing? Our Tier-3 network engineering team is on standby 24 hours a day.
+      </p>
+    </div>
+  </section>
+
+  <!-- Support Form & Contact Section -->
+  <section class="section" style="padding-top:20px;">
+    <div class="container container-narrow">
+
+      <!-- Knowledge Cards -->
+      <div class="cards-grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-bottom:40px;">
+        <a href="docs.html" class="card" style="padding:22px; text-decoration:none;">
+          <div style="font-size:1.6rem; margin-bottom:8px;">📖</div>
+          <h4 style="color:#fff; font-size:1.05rem; margin-bottom:4px;">Setup Docs</h4>
+          <p style="color:var(--text-muted); font-size:0.85rem;">Official V2Ray installation guides for all major OS platforms.</p>
+        </a>
+
+        <a href="status.html" class="card" style="padding:22px; text-decoration:none;">
+          <div style="font-size:1.6rem; margin-bottom:8px;">📡</div>
+          <h4 style="color:#fff; font-size:1.05rem; margin-bottom:4px;">Node Telemetry</h4>
+          <p style="color:var(--text-muted); font-size:0.85rem;">Check regional uptime, latency health, and cluster incidents.</p>
+        </a>
+
+        <a href="dashboard.html" class="card" style="padding:22px; text-decoration:none;">
+          <div style="font-size:1.6rem; margin-bottom:8px;">🔑</div>
+          <h4 style="color:#fff; font-size:1.05rem; margin-bottom:4px;">Portal Portal</h4>
+          <p style="color:var(--text-muted); font-size:0.85rem;">Manage devices, grab new V2Ray configuration files, or reset keys.</p>
+        </a>
+      </div>
+
+      <!-- Ticket Submission Card -->
+      <div class="card" style="padding:36px;">
+        <h3 style="font-size:1.5rem; margin-bottom:8px;">Submit a Technical Support Ticket</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:28px;">All communications can optionally be encrypted using our team's PGP master key.</p>
+
+        <form id="supportTicketForm">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input type="text" class="form-control" required placeholder="Alex Turner" id="ticketName">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email Address (Registered)</label>
+              <input type="email" class="form-control" required placeholder="alex@example.com" id="ticketEmail">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label class="form-label">Department / Issue Type</label>
+              <select class="form-control" id="ticketCategory">
+                <option value="v2ray">V2Ray Connection & Routing</option>
+                <option value="billing">Subscription & Billing Questions</option>
+                <option value="device">Device Management & V2Ray Config</option>
+                <option value="cloud">Cloud Gateway & Dedicated IP Inquiry</option>
+                <option value="security">Security / Audit Disclosure</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Priority</label>
+              <select class="form-control" id="ticketPriority">
+                <option value="normal">Normal Priority</option>
+                <option value="high">High (Service Disruption)</option>
+                <option value="urgent">Urgent (Dedicated IP / Enterprise)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-control" required placeholder="e.g. Handshake timing out on Ubuntu 24.04 node" id="ticketSubject">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Describe your issue in detail</label>
+            <textarea class="form-control" required placeholder="Include your operating system, V2Ray client (e.g. v2rayN, v2rayNG, Shadowrocket) version, selected server location, and any output from 'wg show'..." id="ticketMessage"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Submit Support Ticket</button>
+        </form>
+
+        <div id="ticketSuccessNotice" style="display:none; margin-top:20px; padding:20px; background:rgba(16,185,129,0.15); border:1px solid var(--accent-emerald); border-radius:var(--radius-sm); text-align:center;">
+          <h4 style="color:#fff; margin-bottom:4px;">✅ Ticket Submitted Successfully!</h4>
+          <p style="color:var(--text-muted); font-size:0.9rem;">Ticket reference <strong>#NF-84291</strong> has been created. A support engineer will reply directly to your email.</p>
+        </div>
+      </div>
+
+      <!-- Direct PGP & Emergency Contact -->
+      <div style="margin-top:36px; padding:20px; background:rgba(255,255,255,0.02); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+        <div>
+          <strong style="color:#fff; display:block;">🔐 Encrypted Security Contact</strong>
+          <span style="color:var(--text-dim); font-size:0.85rem; font-family:var(--font-mono);">info.netforge@gmail.com &bull; PGP Fingerprint: 4F2A 91C0 E482 11BB</span>
+        </div>
+        <a href="mailto:info.netforge@gmail.com" class="btn btn-sm btn-secondary">Send Email Directly</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-bio">
+          <div class="brand" style="margin-bottom:12px;">
+            <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+            <div class="brand-text">NET<span>FORGE</span></div>
+          </div>
+          <p>24/7/365 dedicated network and privacy support.</p>
+          <div class="protocol-notice">V2Ray is an open-source network proxy platform designed to provide unrestricted, secure, and private internet access.</div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="vpn.html">VPN Overview</a></li>
+            <li><a href="purchase.html">Purchase Plans</a></li>
+            <li><a href="purchase.html">Purchase VPN</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Infrastructure</h4>
+          <ul>
+            <li><a href="locations.html">Server Locations</a></li>
+            <li><a href="status.html">Network Status</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="docs.html">V2Ray Guides</a></li>
+            <li><a href="support.html">Help Desk</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li></li>
+            <li><a href="dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 NETFORGE Technologies. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,10 @@
+files/ contains extracted data and its hierarchy. Successfully processed intermediate archives are removed; extraction.json records their output paths in removedIntermediates. CAB payloads from recognized MSU update packages remain available alongside their extracted contents.
+recovered/ contains nested extraction and ASAR/web assets, Python/game containers and supported Java, .NET, Python or Lua source recovery.
+Resource files and native programs are preserved as data. Extracting a file does not recover its source.
+Encrypted ZIP, 7z and RAR archives can be opened with a supplied password. Split members are unsupported. InstallShield companions must be bundled in a .installer.zip or supported ZIP self-extractor. No applications are executed.
+
+upload/app/CrashReporter.exe: Recovery incomplete: exit 70: Error decompiling @02000002 CrashReporter.ProjectInstaller in assembly "/tmp/decompiler/863f4bf627013c07bc541deb60773897/NetMod_x86(Latest).exe/files/app/CrashReporter.exe"  ---> System.BadImageFormatException: Invalid method header: 0x45    at System.Reflection.Metadata.MethodBodyBlock.Create(BlobReader reader) in offset 88    at System.Reflection.Metadata.PEReaderExtensions.GetMethodBody(PEReader peReader, Int32 relativeVirtualAddress) in offset 52    at ICSharpCode.Decompiler.Metadata.PEFile.; original preserved.
+
+upload/app/NetMod.exe: Recovery incomplete: exit 70: System.BadImageFormatException: Read out of bounds.    at System.Reflection.Throw.OutOfBounds()    at System.Reflection.Internal.MemoryBlock.PeekHeapReference(Int32 offset, Boolean smallRefSize)    at System.Reflection.Metadata.Ecma335.StandAloneSigTableReader.GetSignature(Int32 rowId)    at System.Reflection.Metadata.StandaloneSignature.get_Signature()    at System.Reflection.Metadata.StandaloneSignature.GetKind()    at ICSharpCode.Decompiler.CSharp.RequiredNamespaceCollector.CollectNamespacesF; original preserved.
+
+: Archive processing finished with incomplete results. Available files can be browsed and downloaded; see DECOMPILATION-NOTES.txt for details.

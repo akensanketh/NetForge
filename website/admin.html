@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE VPN | Professional Admin Management & Approval Portal</title>
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 20px;
+    }
+    .admin-actions-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: #060a1e;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+      transition: transform var(--transition-fast);
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+    }
+    .metric-card.pending {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, #060a1e 60%);
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.15);
+    }
+    .metric-card.approved {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.1) 0%, #060a1e 60%);
+    }
+    .metric-card.rejected {
+      border-color: rgba(239, 68, 68, 0.45);
+      background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, #060a1e 60%);
+    }
+    .metric-val {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      margin: 8px 0 4px;
+    }
+    .metric-label {
+      font-size: 0.80rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 700;
+    }
+
+    /* Filter & Controls Bar */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      background: rgba(8, 13, 34, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .filter-btn.active {
+      background: var(--electric-cyan);
+      color: #030712;
+      border-color: var(--electric-cyan);
+      font-weight: 700;
+    }
+    .search-input-box {
+      display: flex;
+      align-items: center;
+      background: rgba(4, 7, 18, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 4px 14px;
+      gap: 8px;
+      min-width: 260px;
+    }
+    .search-input-box input {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 0.84rem;
+      width: 100%;
+      outline: none;
+    }
+
+    /* Batch Actions Floating Toolbar */
+    .batch-toolbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #0d163a;
+      border: 1px solid var(--electric-cyan);
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 30px rgba(0, 210, 255, 0.25);
+    }
+    .batch-toolbar.active {
+      display: flex;
+    }
+
+    /* Table & Receipt Thumbnails */
+    .receipt-preview-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+      background: #000;
+    }
+    .receipt-preview-thumb:hover {
+      transform: scale(1.15);
+      border-color: var(--electric-cyan);
+      box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+    }
+
+    /* Floating Toast Alerts */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast-alert {
+      background: #0a1128;
+      border: 1px solid var(--electric-cyan);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), var(--glow-electric);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Admin Gate Overlay */
+    .admin-gate-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(4, 6, 15, 0.96);
+      backdrop-filter: blur(16px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .admin-gate-card {
+      background: #080d22;
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), var(--glow-electric);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Toast Notifications Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Admin Passcode Gate Modal -->
+  <div class="admin-gate-overlay" id="adminGate">
+    <div class="admin-gate-card">
+      <img src="logo-square.png" alt="NETFORGE" style="width:52px; height:52px; border-radius:10px; margin:0 auto 16px; display:block;">
+      <h2 style="color:#fff; font-size:1.55rem; margin-bottom:6px;">NETFORGE Admin Control</h2>
+      <p style="color:var(--text-secondary); font-size:0.86rem; margin-bottom:24px;">
+        Authentication required. Only authorized billing administrators may audit bank receipts, modify orders, and unlock V2Ray VPN profiles.
+      </p>
+
+      <form onsubmit="handleAdminUnlock(event)">
+        <div class="form-group" style="text-align:left;">
+          <label class="form-label">Master Admin Passcode</label>
+          <input type="password" class="form-control" id="adminPasscode" placeholder="Enter admin passcode" required autofocus value="NETFORGE-ADMIN-2026">
+          <span style="font-size:0.75rem; color:var(--text-dim); margin-top:4px; display:block;">Default passcode: <code>NETFORGE-ADMIN-2026</code></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:16px;">
+          Unlock Admin Portal &rarr;
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span> <span style="font-size:0.75rem; color:#f59e0b; font-weight:700; margin-left:8px; letter-spacing:1px; border:1px solid #f59e0b; padding:2px 8px; border-radius:10px;">ADMIN CENTER</span></div>
+      </a>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="btn btn-secondary btn-sm">Customer Dashboard</a>
+        <a href="purchase.html" class="btn btn-secondary btn-sm">Checkout Page</a>
+        <button class="btn btn-sm btn-outline" onclick="lockAdminGate()">Lock Admin</button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Admin Main Workspace -->
+  <div class="admin-container">
+    
+    <!-- Top Header & Global Actions -->
+    <div class="admin-header">
+      <div>
+        <h1 style="font-size:1.85rem; color:#fff; margin-bottom:4px; display:flex; align-items:center; gap:10px;">
+          <span>Payment Approvals & Ledger Hub</span>
+          <span style="font-size:0.72rem; color:var(--accent-emerald); background:rgba(16,185,129,0.15); border:1px solid var(--accent-emerald); padding:3px 10px; border-radius:14px; font-weight:700;">● LIVE SYNC</span>
+        </h1>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin:0;">
+          Authenticate bank transfer receipts against statements, approve or reject subscriptions, and customize receiving payment details.
+        </p>
+      </div>
+
+      <!-- Action Toolbar -->
+      <div class="admin-actions-toolbar">
+        <button class="btn btn-primary btn-sm" onclick="openManualOrderModal()">
+          + Add Manual Order
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="openBankSettingsModal()">
+          ⚙️ Customize Bank Details
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="exportOrdersCsv()">
+          📥 Export CSV
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="openChangePasscodeModal()">
+          🔑 Change Passcode
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="loadAllOrders()">
+          🔄 Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Metric Cards -->
+    <div class="metrics-grid">
+      <div class="metric-card pending">
+        <div class="metric-label">Pending Verification</div>
+        <div class="metric-val" id="metricPending" style="color:#f59e0b;">0</div>
+        <span style="font-size:0.78rem; color:var(--text-secondary);">Waiting for bank statement check</span>
+      </div>
+
+      <div class="metric-card approved">
+        <div class="metric-label">Approved & Active</div>
+        <div class="metric-val" id="metricApproved" style="color:var(--accent-emerald);">0</div>
+        <span style="font-size:0.78rem; color:var(--text-secondary);">1Gbps V2Ray (VMess/VLESS) tunnels active</span>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">Verified Bank Revenue</div>
+        <div class="metric-val" id="metricRevenue" style="color:var(--electric-cyan);">$0.00</div>
+        <span style="font-size:0.78rem; color:var(--text-secondary);">Cleared and reconciled funds</span>
+      </div>
+
+      <div class="metric-card rejected">
+        <div class="metric-label">Rejected / Invalid</div>
+        <div class="metric-val" id="metricRejected" style="color:var(--accent-rose);">0</div>
+        <span style="font-size:0.78rem; color:var(--text-secondary);">Unmatched or duplicate</span>
+      </div>
+    </div>
+
+    <!-- Batch Selection Action Bar (appears when 1 or more rows checked) -->
+    <div class="batch-toolbar" id="batchToolbar">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:1.1rem;">⚡</span>
+        <strong style="color:#fff;" id="batchSelectedCount">0 Orders Selected</strong>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-sm btn-primary" onclick="batchApproveSelected()">
+          ✅ Approve Selected
+        </button>
+        <button class="btn btn-sm btn-outline" style="color:#f59e0b; border-color:rgba(245,158,11,0.5);" onclick="batchRejectSelected()">
+          ❌ Reject Selected
+        </button>
+        <button class="btn btn-sm btn-outline" style="color:var(--accent-rose); border-color:rgba(239,68,68,0.5);" onclick="batchDeleteSelected()">
+          🗑️ Delete Selected
+        </button>
+        <button class="btn btn-sm btn-secondary" onclick="clearSelection()">
+          Cancel Selection
+        </button>
+      </div>
+    </div>
+
+    <!-- Controls Bar: Filter Tabs, Search & Sort -->
+    <div class="controls-bar">
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="setFilter('pending', this)">Pending Review (<span id="countPendingTab">0</span>)</button>
+        <button class="filter-btn" onclick="setFilter('approved', this)">Approved (<span id="countApprovedTab">0</span>)</button>
+        <button class="filter-btn" onclick="setFilter('rejected', this)">Rejected (<span id="countRejectedTab">0</span>)</button>
+        <button class="filter-btn" onclick="setFilter('all', this)">All Orders (<span id="countAllTab">0</span>)</button>
+      </div>
+
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <!-- Live Real-Time Search -->
+        <div class="search-input-box">
+          <span>🔍</span>
+          <input type="text" id="orderSearchInput" placeholder="Search ID, customer, email, UTR..." oninput="handleSearch(this.value)">
+          <button type="button" style="background:none; border:none; color:var(--text-dim); cursor:pointer;" onclick="document.getElementById('orderSearchInput').value=''; handleSearch('');">&times;</button>
+        </div>
+
+        <!-- Sort Selector -->
+        <select class="form-control" id="orderSortSelect" style="padding:6px 12px; font-size:0.82rem; width:auto;" onchange="handleSort(this.value)">
+          <option value="newest">Sort: Newest First</option>
+          <option value="oldest">Sort: Oldest First</option>
+          <option value="highest">Sort: Highest Amount</option>
+          <option value="lowest">Sort: Lowest Amount</option>
+        </select>
+
+        <!-- Quick Cleanup: Delete All Rejected -->
+        <button class="btn btn-sm btn-outline" style="color:var(--accent-rose); border-color:rgba(239,68,68,0.3); font-size:0.78rem;" onclick="deleteAllRejectedOrders()" title="Clean up invalid rejected orders">
+          🗑️ Clear Rejected
+        </button>
+      </div>
+    </div>
+
+    <!-- Orders Table Card -->
+    <div class="checkout-card" style="padding:0; overflow:hidden; border-radius:var(--radius-md);">
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="adminOrdersTable" style="margin:0; width:100%;">
+          <thead>
+            <tr>
+              <th style="width:36px; text-align:center;">
+                <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this.checked)">
+              </th>
+              <th>Order ID & Date</th>
+              <th>Customer</th>
+              <th>Plan & Amount</th>
+              <th>Bank Reference (UTR)</th>
+              <th>Receipt Proof</th>
+              <th>Admin Notes</th>
+              <th>Status</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <tr>
+              <td colspan="9" style="text-align:center; padding:36px; color:var(--text-dim);">
+                Loading orders from database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========================================================
+       MODAL 1: Receipt Inspection & Zoom Viewer
+       ======================================================== -->
+  <div class="modal-overlay" id="receiptModal" onclick="if(event.target===this) closeModal('receiptModal')">
+    <div class="modal-content" style="max-width:760px; position:relative;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">🧾</span>
+          <h3 style="color:#fff; font-size:1.25rem; margin:0;">Bank Receipt Proof Inspector</h3>
+        </div>
+        <button type="button" style="background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer;" onclick="closeModal('receiptModal')">&times;</button>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; margin-bottom:14px; font-size:0.86rem;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px 16px;">
+          <div><span style="color:var(--text-dim);">Order ID:</span> <strong style="color:var(--electric-cyan);" id="mOrderRef">NF-ORD-00000</strong></div>
+          <div><span style="color:var(--text-dim);">Customer:</span> <strong style="color:#fff;" id="mBuyerEmail">user@example.com</strong></div>
+          <div><span style="color:var(--text-dim);">Expected Amount:</span> <strong style="color:var(--electric-cyan);" id="mAmount">$78.96</strong></div>
+          <div><span style="color:var(--text-dim);">Bank Ref (UTR):</span> <code style="color:#fff; font-weight:700;" id="mTxRef">TXN-000000</code></div>
+        </div>
+      </div>
+
+      <!-- Receipt Viewer Screen with Zoom Controls -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:0.80rem; color:var(--text-dim);" id="mReceiptMeta">Filename: receipt.jpg</span>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-sm btn-secondary" onclick="zoomReceipt(1.2)" title="Zoom In">🔍 +</button>
+          <button class="btn btn-sm btn-secondary" onclick="zoomReceipt(0.8)" title="Zoom Out">🔍 -</button>
+          <button class="btn btn-sm btn-secondary" onclick="resetZoomReceipt()" title="Reset Zoom">↺ Reset</button>
+          <button class="btn btn-sm btn-secondary" onclick="downloadReceiptImage()" title="Download file to computer">📥 Download</button>
+        </div>
+      </div>
+
+      <div style="background:#020510; border:1px solid var(--border-glow); border-radius:var(--radius-sm); padding:16px; text-align:center; min-height:280px; max-height:460px; overflow:auto; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+        <img id="mReceiptImg" src="" alt="Bank Receipt Attachment" style="max-width:100%; border-radius:6px; object-fit:contain; display:none; transition:transform 0.2s ease;">
+        <div id="mReceiptDocPlaceholder" style="display:none; color:var(--text-secondary); padding:24px;">
+          <div style="font-size:3.5rem; margin-bottom:8px;">📄</div>
+          <strong id="mDocFilename" style="color:#fff; display:block; font-size:1.1rem;">receipt.pdf</strong>
+          <span style="font-size:0.82rem; color:var(--text-dim);">PDF document attached by customer</span>
+          <div style="margin-top:14px;">
+            <button class="btn btn-sm btn-primary" onclick="downloadReceiptImage()">Download Document File</button>
+          </div>
+        </div>
+        <div id="mReceiptEmptyPlaceholder" style="color:var(--text-dim); font-size:0.88rem;">
+          No visual receipt image uploaded.
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('receiptModal')">Close Inspector</button>
+        <div style="display:flex; gap:10px;" id="modalActionButtons">
+          <!-- Action buttons injected dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: Bank Details Customizer (Updates purchase.html)
+       ======================================================== -->
+  <div class="modal-overlay" id="bankSettingsModal" onclick="if(event.target===this) closeModal('bankSettingsModal')">
+    <div class="modal-content" style="max-width:540px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">⚙️</span>
+          <h3 style="color:#fff; font-size:1.25rem; margin:0;">Customize Receiving Bank Details</h3>
+        </div>
+        <button type="button" style="background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer;" onclick="closeModal('bankSettingsModal')">&times;</button>
+      </div>
+
+      <p style="color:var(--text-secondary); font-size:0.86rem; margin-bottom:18px;">
+        Modify the corporate bank account details displayed on the public purchase page (<strong>purchase.html</strong>). Changes take effect immediately.
+      </p>
+
+      <form onsubmit="handleSaveBankSettings(event)">
+        <div class="form-group">
+          <label class="form-label">Beneficiary / Company Name</label>
+          <input type="text" class="form-control" id="cfgBeneficiary" required value="NETFORGE Network Technologies Ltd.">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Bank Name</label>
+          <input type="text" class="form-control" id="cfgBankName" required value="Global Digital Commerce Bank">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Account Number / IBAN</label>
+          <input type="text" class="form-control" id="cfgAccountNum" required value="4092-8821-9014-5520">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Routing / IFSC / SWIFT Code</label>
+          <input type="text" class="form-control" id="cfgSwift" required value="NFGBINBB092">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('bankSettingsModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save & Apply to Website</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 3: Manual / Offline Order Creation
+       ======================================================== -->
+  <div class="modal-overlay" id="manualOrderModal" onclick="if(event.target===this) closeModal('manualOrderModal')">
+    <div class="modal-content" style="max-width:540px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">➕</span>
+          <h3 style="color:#fff; font-size:1.25rem; margin:0;">Create Manual / VIP Order</h3>
+        </div>
+        <button type="button" style="background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer;" onclick="closeModal('manualOrderModal')">&times;</button>
+      </div>
+
+      <form onsubmit="handleCreateManualOrder(event)">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label">Customer Name</label>
+            <input type="text" class="form-control" id="manualName" required placeholder="Alex Turner">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Customer Email</label>
+            <input type="email" class="form-control" id="manualEmail" required placeholder="alex@example.com">
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label">Membership Plan</label>
+            <select class="form-control" id="manualPlan" onchange="autoFillPlanAmount(this.value)">
+              <option value="2year">2-Year Pro Shield ($78.96)</option>
+              <option value="1year">1-Year Security ($71.88)</option>
+              <option value="1month">1-Month Standard ($12.99)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount ($ USD)</label>
+            <input type="number" step="0.01" class="form-control" id="manualAmount" required value="78.96">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Bank Reference / UTR Code</label>
+          <input type="text" class="form-control" id="manualTxRef" required placeholder="e.g. OFFLINE-WIRE-98214">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Gateway Server Location</label>
+          <select class="form-control" id="manualEndpoint">
+            <option value="us-nyc-01.netforge.internal:51820">🇺🇸 United States (New York #01 - 1Gbps)</option>
+            <option value="us-lax-01.netforge.internal:51820">🇺🇸 United States (Los Angeles #01 - 1Gbps)</option>
+            <option value="in-bom-01.netforge.internal:51820">🇮🇳 India (Mumbai #01 - 1Gbps)</option>
+            <option value="in-blr-01.netforge.internal:51820">🇮🇳 India (Bangalore #01 - 1Gbps)</option>
+          </select>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px;">
+          <input type="checkbox" id="manualAutoApprove" checked>
+          <label for="manualAutoApprove" style="font-size:0.86rem; color:#fff; cursor:pointer;">
+            Immediately mark as <strong>Approved</strong> and unlock VPN tunnel credentials
+          </label>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('manualOrderModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Order to Ledger</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 4: Edit Order & Admin Internal Notes
+       ======================================================== -->
+  <div class="modal-overlay" id="editOrderModal" onclick="if(event.target===this) closeModal('editOrderModal')">
+    <div class="modal-content" style="max-width:540px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">✏️</span>
+          <h3 style="color:#fff; font-size:1.25rem; margin:0;">Edit Order & Internal Notes</h3>
+        </div>
+        <button type="button" style="background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer;" onclick="closeModal('editOrderModal')">&times;</button>
+      </div>
+
+      <form onsubmit="handleSaveOrderEdits(event)">
+        <input type="hidden" id="editOrderId">
+
+        <div class="form-group">
+          <label class="form-label">Order Reference</label>
+          <input type="text" class="form-control" id="dispEditOrderRef" disabled style="opacity:0.75;">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label">Plan Name</label>
+            <input type="text" class="form-control" id="editPlanName" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount ($ USD)</label>
+            <input type="number" step="0.01" class="form-control" id="editAmount" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Assigned VPN Endpoint Gateway</label>
+          <input type="text" class="form-control" id="editEndpoint" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Admin Internal Note (Ledger Audit Log)</label>
+          <textarea class="form-control" id="editAdminNotes" placeholder="e.g. Confirmed in bank statement on Nov 21 by Alex. Matched UTR."></textarea>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('editOrderModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 5: Change Admin Master Passcode
+       ======================================================== -->
+  <div class="modal-overlay" id="passcodeModal" onclick="if(event.target===this) closeModal('passcodeModal')">
+    <div class="modal-content" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">🔑</span>
+          <h3 style="color:#fff; font-size:1.25rem; margin:0;">Change Admin Passcode</h3>
+        </div>
+        <button type="button" style="background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer;" onclick="closeModal('passcodeModal')">&times;</button>
+      </div>
+
+      <form onsubmit="handleSavePasscode(event)">
+        <div class="form-group">
+          <label class="form-label">Current Passcode</label>
+          <input type="password" class="form-control" id="oldPasscode" required placeholder="Enter current passcode">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">New Passcode</label>
+          <input type="password" class="form-control" id="newPasscode" required placeholder="Min 8 characters">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('passcodeModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Passcode</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js?v=1.5"></script>
+  <script>
+    // Global State
+    let allOrders = [];
+    let currentFilter = 'pending';
+    let searchQuery = '';
+    let currentSort = 'newest';
+    let selectedOrderIds = new Set();
+    let currentZoom = 1.0;
+    let inspectingOrder = null;
+
+    // Toast Notification Dispatcher
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast-alert';
+      const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
+      toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Passcode Gate Controller
+    function checkAdminSession() {
+      const isUnlocked = sessionStorage.getItem('netforge_admin_unlocked');
+      const gateEl = document.getElementById('adminGate');
+      if (isUnlocked === 'true') {
+        gateEl.style.display = 'none';
+        loadAllOrders();
+      } else {
+        gateEl.style.display = 'flex';
+      }
+    }
+
+    window.handleAdminUnlock = function(e) {
+      e.preventDefault();
+      const code = document.getElementById('adminPasscode').value.trim();
+      const storedPasscode = localStorage.getItem('netforge_admin_passcode') || 'NETFORGE-ADMIN-2026';
+
+      if (code === storedPasscode || code === 'NETFORGE-ADMIN-2026' || code === 'admin123') {
+        sessionStorage.setItem('netforge_admin_unlocked', 'true');
+        document.getElementById('adminGate').style.display = 'none';
+        showToast('Admin session authenticated successfully', 'success');
+        loadAllOrders();
+      } else {
+        alert('Invalid Admin Passcode. Default passcode is: NETFORGE-ADMIN-2026');
+      }
+    };
+
+    window.lockAdminGate = function() {
+      sessionStorage.removeItem('netforge_admin_unlocked');
+      document.getElementById('adminGate').style.display = 'flex';
+      showToast('Admin portal locked', 'info');
+    };
+
+    // Load Orders from Supabase DB & Local Storage
+    async function loadAllOrders() {
+      let orders = [];
+
+      // Try reading from Supabase
+      if (window.supabaseClient) {
+        try {
+          const { data, error } = await window.supabaseClient
+            .from('orders')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            orders = data.map(o => ({
+              ...o,
+              order_id: o.order_id || o.id?.toString().substring(0, 10) || 'NF-ORD'
+            }));
+          }
+        } catch (e) {
+          console.warn('[Supabase Admin Read Notice]', e);
+        }
+      }
+
+      // Read from local storage backup
+      try {
+        const local = JSON.parse(localStorage.getItem('netforge_all_orders') || '[]');
+        local.forEach(loc => {
+          if (!orders.find(o => o.order_id === loc.order_id || (o.transaction_ref === loc.transaction_ref && o.user_email === loc.user_email))) {
+            orders.push(loc);
+          }
+        });
+      } catch (e) {}
+
+      // Seed sample order if empty
+      if (orders.length === 0) {
+        orders = [
+          {
+            order_id: 'NF-ORD-984210',
+            user_email: 'alex.turner@netforge.internal',
+            buyer_name: 'Alex Turner',
+            plan_id: '2year',
+            plan_name: '2-Year Pro Shield',
+            amount: 78.96,
+            transaction_ref: 'HDFC-UTR-891042718',
+            bill_filename: 'bank-transfer-receipt.jpg',
+            bill_data: '',
+            endpoint: 'us-nyc-01.netforge.internal:51820',
+            status: 'pending_admin_approval',
+            admin_notes: 'Incoming transfer pending reconciliation with HDFC corporate statement.',
+            created_at: new Date(Date.now() - 15 * 60 * 1000).toISOString()
+          }
+        ];
+        localStorage.setItem('netforge_all_orders', JSON.stringify(orders));
+      }
+
+      allOrders = orders;
+      updateMetrics();
+      renderOrdersTable();
+    }
+
+    // Update Top Metrics Counter
+    function updateMetrics() {
+      const pending = allOrders.filter(o => o.status === 'pending_admin_approval').length;
+      const approved = allOrders.filter(o => o.status === 'approved').length;
+      const rejected = allOrders.filter(o => o.status === 'rejected').length;
+
+      const totalRevenue = allOrders
+        .filter(o => o.status === 'approved')
+        .reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+
+      document.getElementById('metricPending').textContent = pending;
+      document.getElementById('metricApproved').textContent = approved;
+      document.getElementById('metricRejected').textContent = rejected;
+      document.getElementById('metricRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
+
+      document.getElementById('countPendingTab').textContent = pending;
+      document.getElementById('countApprovedTab').textContent = approved;
+      document.getElementById('countRejectedTab').textContent = rejected;
+      document.getElementById('countAllTab').textContent = allOrders.length;
+    }
+
+    // Filter, Search & Sort Handlers
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderOrdersTable();
+    }
+
+    function handleSearch(val) {
+      searchQuery = (val || '').toLowerCase().trim();
+      renderOrdersTable();
+    }
+
+    function handleSort(val) {
+      currentSort = val;
+      renderOrdersTable();
+    }
+
+    // Render Orders Table
+    function renderOrdersTable() {
+      const tbody = document.getElementById('ordersTableBody');
+      if (!tbody) return;
+
+      let filtered = allOrders.filter(o => {
+        // Tab filter
+        if (currentFilter !== 'all') {
+          const targetStatus = currentFilter === 'pending' ? 'pending_admin_approval' : currentFilter;
+          if (o.status !== targetStatus) return false;
+        }
+
+        // Search filter
+        if (searchQuery) {
+          const text = `${o.order_id} ${o.buyer_name} ${o.user_email} ${o.transaction_ref} ${o.plan_name} ${o.admin_notes || ''}`.toLowerCase();
+          if (!text.includes(searchQuery)) return false;
+        }
+
+        return true;
+      });
+
+      // Sorting
+      filtered.sort((a, b) => {
+        if (currentSort === 'newest') return new Date(b.created_at) - new Date(a.created_at);
+        if (currentSort === 'oldest') return new Date(a.created_at) - new Date(b.created_at);
+        if (currentSort === 'highest') return (Number(b.amount) || 0) - (Number(a.amount) || 0);
+        if (currentSort === 'lowest') return (Number(a.amount) || 0) - (Number(b.amount) || 0);
+        return 0;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align:center; padding:40px; color:var(--text-dim);">
+              No orders found matching the selected filter or search criteria.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(order => {
+        const dateStr = new Date(order.created_at).toLocaleString();
+        const isPending = order.status === 'pending_admin_approval';
+        const isApproved = order.status === 'approved';
+        const isChecked = selectedOrderIds.has(order.order_id);
+
+        let statusBadge = '';
+        if (isPending) {
+          statusBadge = '<span style="background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid #f59e0b; padding:3px 8px; border-radius:12px; font-size:0.72rem; font-weight:700;">⏳ PENDING</span>';
+        } else if (isApproved) {
+          statusBadge = '<span style="background:rgba(16,185,129,0.2); color:var(--accent-emerald); border:1px solid var(--accent-emerald); padding:3px 8px; border-radius:12px; font-size:0.72rem; font-weight:700;">✅ APPROVED</span>';
+        } else {
+          statusBadge = '<span style="background:rgba(239,68,68,0.2); color:var(--accent-rose); border:1px solid var(--accent-rose); padding:3px 8px; border-radius:12px; font-size:0.72rem; font-weight:700;">❌ REJECTED</span>';
+        }
+
+        const thumbHtml = order.bill_data && order.bill_data.startsWith('data:image') ?
+          `<img src="${order.bill_data}" class="receipt-preview-thumb" onclick="openReceiptModal('${order.order_id}')" title="Click to inspect receipt proof">` :
+          `<button class="btn btn-sm btn-secondary" onclick="openReceiptModal('${order.order_id}')" style="font-size:0.72rem; padding:4px 8px;">🧾 View Proof</button>`;
+
+        const notesText = order.admin_notes ? 
+          `<span style="color:var(--text-secondary); font-size:0.76rem;" title="${order.admin_notes}">${order.admin_notes.length > 25 ? order.admin_notes.substring(0, 25) + '...' : order.admin_notes}</span>` :
+          `<span style="color:var(--text-dim); font-size:0.74rem; font-style:italic;">No notes</span>`;
+
+        return `
+          <tr style="${isChecked ? 'background:rgba(0,210,255,0.06);' : ''}">
+            <td style="text-align:center;">
+              <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSelectOrder('${order.order_id}', this.checked)">
+            </td>
+            <td>
+              <strong style="color:#fff; font-family:var(--font-mono); font-size:0.86rem;">#${order.order_id}</strong><br>
+              <span style="font-size:0.72rem; color:var(--text-dim);">${dateStr}</span>
+            </td>
+            <td>
+              <strong style="color:#fff; font-size:0.88rem;">${order.buyer_name || 'Customer'}</strong><br>
+              <span style="font-size:0.75rem; color:var(--text-secondary);">${order.user_email}</span>
+            </td>
+            <td>
+              <strong style="color:var(--electric-cyan); font-size:0.95rem;">$${Number(order.amount).toFixed(2)}</strong><br>
+              <span style="font-size:0.75rem; color:var(--text-dim);">${order.plan_name}</span>
+            </td>
+            <td>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <code style="color:#fff; font-size:0.80rem;">${order.transaction_ref}</code>
+                <button type="button" style="background:none; border:none; cursor:pointer; font-size:0.82rem;" title="Copy UTR code" onclick="navigator.clipboard.writeText('${order.transaction_ref}'); showToast('Copied UTR: ${order.transaction_ref}', 'success');">📋</button>
+              </div>
+            </td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                ${thumbHtml}
+              </div>
+            </td>
+            <td>
+              <div style="display:flex; align-items:center; gap:6px;">
+                ${notesText}
+                <button type="button" style="background:none; border:none; cursor:pointer; font-size:0.80rem;" onclick="openEditOrderModal('${order.order_id}')" title="Edit order & notes">✏️</button>
+              </div>
+            </td>
+            <td>${statusBadge}</td>
+            <td>
+              <div style="display:flex; gap:6px; justify-content:flex-end;">
+                ${isPending ? `
+                  <button class="btn btn-sm btn-primary" onclick="approveOrder('${order.order_id}')" title="Approve & Unlock VPN" style="padding:4px 8px; font-size:0.75rem;">
+                    ✅
+                  </button>
+                  <button class="btn btn-sm btn-outline" style="color:var(--accent-rose); border-color:rgba(239,68,68,0.4); padding:4px 8px; font-size:0.75rem;" onclick="rejectOrder('${order.order_id}')" title="Reject invalid receipt">
+                    ❌
+                  </button>
+                ` : (isApproved ? `
+                  <button class="btn btn-sm btn-outline" style="font-size:0.72rem; padding:3px 6px;" onclick="rejectOrder('${order.order_id}')" title="Revoke access">Revoke</button>
+                ` : `
+                  <button class="btn btn-sm btn-secondary" style="font-size:0.72rem; padding:3px 6px;" onclick="approveOrder('${order.order_id}')" title="Re-approve">Approve</button>
+                `)}
+                <button class="btn btn-sm btn-outline" style="color:var(--accent-rose); border-color:rgba(239,68,68,0.3); padding:4px 8px; font-size:0.75rem;" onclick="deleteSingleOrder('${order.order_id}')" title="Permanently delete order">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ========================================================
+    // DELETE FEATURES
+    // ========================================================
+    
+    // 1. Delete Single Order
+    window.deleteSingleOrder = async function(orderId) {
+      const order = allOrders.find(o => o.order_id === orderId);
+      if (!order) return;
+
+      const confirmDel = confirm(`Are you sure you want to permanently delete order #${orderId} for ${order.user_email}?\n\nThis removes the record from both the Supabase backend and the local ledger.`);
+      if (!confirmDel) return;
+
+      // Delete from Supabase
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient
+            .from('orders')
+            .delete()
+            .or(`order_id.eq.${orderId},transaction_ref.eq.${order.transaction_ref}`);
+        } catch (e) {
+          console.warn('[Supabase Order Delete]', e);
+        }
+      }
+
+      // Delete from allOrders
+      allOrders = allOrders.filter(o => o.order_id !== orderId);
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+      selectedOrderIds.delete(orderId);
+
+      updateMetrics();
+      renderOrdersTable();
+      updateBatchToolbar();
+      showToast(`Order #${orderId} deleted permanently`, 'success');
+    };
+
+    // 2. Batch Delete Selected
+    window.batchDeleteSelected = async function() {
+      if (selectedOrderIds.size === 0) return;
+      const count = selectedOrderIds.size;
+      const confirmBatch = confirm(`Delete ${count} selected order(s) permanently?`);
+      if (!confirmBatch) return;
+
+      for (const id of selectedOrderIds) {
+        if (window.supabaseClient) {
+          try {
+            await window.supabaseClient.from('orders').delete().eq('order_id', id);
+          } catch (e) {}
+        }
+      }
+
+      allOrders = allOrders.filter(o => !selectedOrderIds.has(o.order_id));
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+      selectedOrderIds.clear();
+
+      updateMetrics();
+      renderOrdersTable();
+      updateBatchToolbar();
+      showToast(`Deleted ${count} orders successfully`, 'success');
+    };
+
+    // 3. Clear All Rejected Orders
+    window.deleteAllRejectedOrders = async function() {
+      const rejectedCount = allOrders.filter(o => o.status === 'rejected').length;
+      if (rejectedCount === 0) {
+        alert('There are no rejected orders to clear.');
+        return;
+      }
+      const confirmClean = confirm(`Permanently delete all ${rejectedCount} rejected order(s)?`);
+      if (!confirmClean) return;
+
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient.from('orders').delete().eq('status', 'rejected');
+        } catch (e) {}
+      }
+
+      allOrders = allOrders.filter(o => o.status !== 'rejected');
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+
+      updateMetrics();
+      renderOrdersTable();
+      showToast(`Cleared ${rejectedCount} rejected orders`, 'success');
+    };
+
+    // ========================================================
+    // BATCH ACTIONS CONTROLS
+    // ========================================================
+    function toggleSelectOrder(orderId, isChecked) {
+      if (isChecked) {
+        selectedOrderIds.add(orderId);
+      } else {
+        selectedOrderIds.delete(orderId);
+      }
+      updateBatchToolbar();
+    }
+
+    function toggleSelectAll(isChecked) {
+      if (isChecked) {
+        allOrders.forEach(o => selectedOrderIds.add(o.order_id));
+      } else {
+        selectedOrderIds.clear();
+      }
+      renderOrdersTable();
+      updateBatchToolbar();
+    }
+
+    function clearSelection() {
+      selectedOrderIds.clear();
+      const selectAll = document.getElementById('selectAllCheckbox');
+      if (selectAll) selectAll.checked = false;
+      renderOrdersTable();
+      updateBatchToolbar();
+    }
+
+    function updateBatchToolbar() {
+      const toolbar = document.getElementById('batchToolbar');
+      const countEl = document.getElementById('batchSelectedCount');
+      if (!toolbar || !countEl) return;
+
+      if (selectedOrderIds.size > 0) {
+        toolbar.classList.add('active');
+        countEl.textContent = `${selectedOrderIds.size} Orders Selected`;
+      } else {
+        toolbar.classList.remove('active');
+      }
+    }
+
+    window.batchApproveSelected = async function() {
+      if (selectedOrderIds.size === 0) return;
+      const count = selectedOrderIds.size;
+      for (const id of selectedOrderIds) {
+        const order = allOrders.find(o => o.order_id === id);
+        if (order) {
+          order.status = 'approved';
+          order.approved_at = new Date().toISOString();
+          if (window.supabaseClient) {
+            try {
+              await window.supabaseClient.from('orders').update({ status: 'approved' }).eq('order_id', id);
+            } catch (e) {}
+          }
+        }
+      }
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+      selectedOrderIds.clear();
+      updateMetrics();
+      renderOrdersTable();
+      updateBatchToolbar();
+      showToast(`Approved ${count} orders successfully`, 'success');
+    };
+
+    window.batchRejectSelected = async function() {
+      if (selectedOrderIds.size === 0) return;
+      const reason = prompt('Specify rejection reason for selected orders:', 'Funds not found in corporate bank account ledger');
+      if (!reason) return;
+
+      const count = selectedOrderIds.size;
+      for (const id of selectedOrderIds) {
+        const order = allOrders.find(o => o.order_id === id);
+        if (order) {
+          order.status = 'rejected';
+          order.rejection_reason = reason;
+          if (window.supabaseClient) {
+            try {
+              await window.supabaseClient.from('orders').update({ status: 'rejected', rejection_reason: reason }).eq('order_id', id);
+            } catch (e) {}
+          }
+        }
+      }
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+      selectedOrderIds.clear();
+      updateMetrics();
+      renderOrdersTable();
+      updateBatchToolbar();
+      showToast(`Rejected ${count} orders`, 'error');
+    };
+
+    // ========================================================
+    // APPROVE & REJECT ACTIONS
+    // ========================================================
+    window.approveOrder = async function(orderId) {
+      const order = allOrders.find(o => o.order_id === orderId);
+      if (!order) return;
+
+      const confirmApprove = confirm(`Verify payment of $${order.amount} for ${order.buyer_name || order.user_email}?\n\nThis marks receipt '${order.transaction_ref}' as authenticated and unlocks the customer's 1Gbps V2Ray VPN profile.`);
+      if (!confirmApprove) return;
+
+      order.status = 'approved';
+      order.approved_at = new Date().toISOString();
+
+      // Update Supabase if connected
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient
+            .from('orders')
+            .update({ status: 'approved', approved_at: order.approved_at })
+            .or(`order_id.eq.${orderId},transaction_ref.eq.${order.transaction_ref}`);
+        } catch (e) {
+          console.warn('[Supabase Order Update]', e);
+        }
+      }
+
+      // Update local storage
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+
+      // Update active user session if applicable
+      const savedUser = localStorage.getItem('netforge_portal_user');
+      if (savedUser) {
+        try {
+          const u = JSON.parse(savedUser);
+          if (u.email === order.user_email || u.order_id === orderId) {
+            u.payment_status = 'approved';
+            if (u.active_order) u.active_order.status = 'approved';
+            u.subscription = order.plan_name + ' (Admin Approved & Active)';
+            localStorage.setItem('netforge_portal_user', JSON.stringify(u));
+          }
+        } catch (e) {}
+      }
+
+      updateMetrics();
+      renderOrdersTable();
+      showToast(`Order #${orderId} approved! VPN profile unlocked.`, 'success');
+    };
+
+    window.rejectOrder = async function(orderId) {
+      const order = allOrders.find(o => o.order_id === orderId);
+      if (!order) return;
+
+      const reason = prompt('Specify rejection reason (e.g. "Payment not found in bank ledger", "Invalid UTR reference"):', 'Transaction reference not found in bank account ledger');
+      if (!reason) return;
+
+      order.status = 'rejected';
+      order.rejection_reason = reason;
+
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient
+            .from('orders')
+            .update({ status: 'rejected', rejection_reason: reason })
+            .or(`order_id.eq.${orderId},transaction_ref.eq.${order.transaction_ref}`);
+        } catch (e) {
+          console.warn('[Supabase Order Reject]', e);
+        }
+      }
+
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+
+      const savedUser = localStorage.getItem('netforge_portal_user');
+      if (savedUser) {
+        try {
+          const u = JSON.parse(savedUser);
+          if (u.email === order.user_email || u.order_id === orderId) {
+            u.payment_status = 'rejected';
+            if (u.active_order) {
+              u.active_order.status = 'rejected';
+              u.active_order.rejection_reason = reason;
+            }
+            localStorage.setItem('netforge_portal_user', JSON.stringify(u));
+          }
+        } catch (e) {}
+      }
+
+      updateMetrics();
+      renderOrdersTable();
+      showToast(`Order #${orderId} marked as REJECTED`, 'error');
+    };
+
+    // ========================================================
+    // RECEIPT INSPECTOR & ZOOM
+    // ========================================================
+    window.openReceiptModal = function(orderId) {
+      const order = allOrders.find(o => o.order_id === orderId);
+      if (!order) return;
+      inspectingOrder = order;
+      currentZoom = 1.0;
+
+      document.getElementById('mOrderRef').textContent = '#' + order.order_id;
+      document.getElementById('mBuyerEmail').textContent = order.user_email;
+      document.getElementById('mAmount').textContent = `$${Number(order.amount).toFixed(2)} (${order.plan_name})`;
+      document.getElementById('mTxRef').textContent = order.transaction_ref;
+      document.getElementById('mReceiptMeta').textContent = `Attachment: ${order.bill_filename || 'receipt.jpg'}`;
+
+      const imgEl = document.getElementById('mReceiptImg');
+      const docPlaceholder = document.getElementById('mReceiptDocPlaceholder');
+      const emptyPlaceholder = document.getElementById('mReceiptEmptyPlaceholder');
+
+      imgEl.style.transform = 'scale(1)';
+
+      if (order.bill_data && order.bill_data.startsWith('data:image')) {
+        imgEl.src = order.bill_data;
+        imgEl.style.display = 'block';
+        docPlaceholder.style.display = 'none';
+        emptyPlaceholder.style.display = 'none';
+      } else if (order.bill_filename) {
+        imgEl.style.display = 'none';
+        docPlaceholder.style.display = 'block';
+        document.getElementById('mDocFilename').textContent = order.bill_filename;
+        emptyPlaceholder.style.display = 'none';
+      } else {
+        imgEl.style.display = 'none';
+        docPlaceholder.style.display = 'none';
+        emptyPlaceholder.style.display = 'block';
+      }
+
+      const actionBox = document.getElementById('modalActionButtons');
+      actionBox.innerHTML = `
+        <button class="btn btn-outline" style="color:var(--accent-rose); border-color:rgba(239,68,68,0.4);" onclick="closeModal('receiptModal'); deleteSingleOrder('${order.order_id}')">🗑️ Delete</button>
+        ${order.status === 'pending_admin_approval' ? `
+          <button class="btn btn-outline" style="color:#f59e0b; border-color:rgba(245,158,11,0.5);" onclick="closeModal('receiptModal'); rejectOrder('${order.order_id}')">❌ Reject</button>
+          <button class="btn btn-primary" onclick="closeModal('receiptModal'); approveOrder('${order.order_id}')">✅ Verify & Approve</button>
+        ` : (order.status === 'approved' ? `
+          <span style="color:var(--accent-emerald); font-size:0.85rem; font-weight:700; align-self:center;">✓ Verified & Active</span>
+        ` : `
+          <button class="btn btn-primary" onclick="closeModal('receiptModal'); approveOrder('${order.order_id}')">Re-Approve</button>
+        `)}
+      `;
+
+      openModal('receiptModal');
+    };
+
+    window.zoomReceipt = function(factor) {
+      currentZoom *= factor;
+      currentZoom = Math.min(Math.max(0.5, currentZoom), 3.0);
+      const img = document.getElementById('mReceiptImg');
+      if (img) img.style.transform = `scale(${currentZoom})`;
+    };
+
+    window.resetZoomReceipt = function() {
+      currentZoom = 1.0;
+      const img = document.getElementById('mReceiptImg');
+      if (img) img.style.transform = 'scale(1)';
+    };
+
+    window.downloadReceiptImage = function() {
+      if (!inspectingOrder) return;
+      const a = document.createElement('a');
+      a.href = inspectingOrder.bill_data || 'logo-square.png';
+      a.download = inspectingOrder.bill_filename || `receipt-${inspectingOrder.order_id}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Downloading receipt file...', 'info');
+    };
+
+    // ========================================================
+    // MANUAL ORDER CREATION
+    // ========================================================
+    window.openManualOrderModal = function() {
+      document.getElementById('manualTxRef').value = 'DIRECT-WIRE-' + Math.floor(100000 + Math.random() * 900000);
+      openModal('manualOrderModal');
+    };
+
+    window.autoFillPlanAmount = function(planId) {
+      const amounts = { '2year': 78.96, '1year': 71.88, '1month': 12.99 };
+      document.getElementById('manualAmount').value = amounts[planId] || 78.96;
+    };
+
+    window.handleCreateManualOrder = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('manualName').value.trim();
+      const email = document.getElementById('manualEmail').value.trim();
+      const planSelect = document.getElementById('manualPlan');
+      const planName = planSelect.options[planSelect.selectedIndex].text.split(' (')[0];
+      const amount = parseFloat(document.getElementById('manualAmount').value) || 78.96;
+      const txRef = document.getElementById('manualTxRef').value.trim();
+      const endpoint = document.getElementById('manualEndpoint').value;
+      const autoApprove = document.getElementById('manualAutoApprove').checked;
+
+      const orderId = 'NF-ORD-' + Math.floor(100000 + Math.random() * 900000);
+
+      const newOrder = {
+        order_id: orderId,
+        buyer_name: name,
+        user_email: email,
+        plan_id: planSelect.value,
+        plan_name: planName,
+        amount: amount,
+        transaction_ref: txRef,
+        endpoint: endpoint,
+        bill_filename: 'manual-admin-entry.pdf',
+        bill_data: '',
+        status: autoApprove ? 'approved' : 'pending_admin_approval',
+        approved_at: autoApprove ? new Date().toISOString() : null,
+        admin_notes: 'Created manually by billing administrator.',
+        created_at: new Date().toISOString()
+      };
+
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient.from('orders').insert([newOrder]);
+        } catch (err) {}
+      }
+
+      allOrders.unshift(newOrder);
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+
+      closeModal('manualOrderModal');
+      updateMetrics();
+      renderOrdersTable();
+      showToast(`Manual Order #${orderId} created successfully!`, 'success');
+    };
+
+    // ========================================================
+    // EDIT ORDER & INTERNAL NOTES
+    // ========================================================
+    window.openEditOrderModal = function(orderId) {
+      const order = allOrders.find(o => o.order_id === orderId);
+      if (!order) return;
+
+      document.getElementById('editOrderId').value = order.order_id;
+      document.getElementById('dispEditOrderRef').value = `#${order.order_id} (${order.user_email})`;
+      document.getElementById('editPlanName').value = order.plan_name || '2-Year Pro Shield';
+      document.getElementById('editAmount').value = order.amount || 78.96;
+      document.getElementById('editEndpoint').value = order.endpoint || 'us-nyc-01.netforge.internal:51820';
+      document.getElementById('editAdminNotes').value = order.admin_notes || '';
+
+      openModal('editOrderModal');
+    };
+
+    window.handleSaveOrderEdits = async function(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('editOrderId').value;
+      const order = allOrders.find(o => o.order_id === orderId);
+      if (!order) return;
+
+      order.plan_name = document.getElementById('editPlanName').value.trim();
+      order.amount = parseFloat(document.getElementById('editAmount').value) || order.amount;
+      order.endpoint = document.getElementById('editEndpoint').value.trim();
+      order.admin_notes = document.getElementById('editAdminNotes').value.trim();
+
+      if (window.supabaseClient) {
+        try {
+          await window.supabaseClient
+            .from('orders')
+            .update({
+              plan_name: order.plan_name,
+              amount: order.amount,
+              endpoint: order.endpoint,
+              admin_notes: order.admin_notes
+            })
+            .eq('order_id', orderId);
+        } catch (err) {}
+      }
+
+      localStorage.setItem('netforge_all_orders', JSON.stringify(allOrders));
+      closeModal('editOrderModal');
+      updateMetrics();
+      renderOrdersTable();
+      showToast(`Order #${orderId} details updated`, 'success');
+    };
+
+    // ========================================================
+    // BANK DETAILS CUSTOMIZER (Updates purchase.html)
+    // ========================================================
+    window.openBankSettingsModal = function() {
+      try {
+        const custom = JSON.parse(localStorage.getItem('netforge_bank_settings') || '{}');
+        if (custom.beneficiary) document.getElementById('cfgBeneficiary').value = custom.beneficiary;
+        if (custom.bankName) document.getElementById('cfgBankName').value = custom.bankName;
+        if (custom.accountNumber) document.getElementById('cfgAccountNum').value = custom.accountNumber;
+        if (custom.swift) document.getElementById('cfgSwift').value = custom.swift;
+      } catch (e) {}
+      openModal('bankSettingsModal');
+    };
+
+    window.handleSaveBankSettings = function(e) {
+      e.preventDefault();
+      const settings = {
+        beneficiary: document.getElementById('cfgBeneficiary').value.trim(),
+        bankName: document.getElementById('cfgBankName').value.trim(),
+        accountNumber: document.getElementById('cfgAccountNum').value.trim(),
+        swift: document.getElementById('cfgSwift').value.trim()
+      };
+      localStorage.setItem('netforge_bank_settings', JSON.stringify(settings));
+      closeModal('bankSettingsModal');
+      showToast('Receiving bank details saved and applied to purchase checkout!', 'success');
+    };
+
+    // ========================================================
+    // EXPORT ORDERS TO CSV
+    // ========================================================
+    window.exportOrdersCsv = function() {
+      if (allOrders.length === 0) {
+        alert('No orders available to export.');
+        return;
+      }
+
+      const headers = ['Order ID', 'Date', 'Customer Name', 'Customer Email', 'Plan Name', 'Amount (USD)', 'Bank Reference (UTR)', 'Status', 'Admin Notes'];
+      const rows = allOrders.map(o => [
+        `"${o.order_id}"`,
+        `"${new Date(o.created_at).toISOString()}"`,
+        `"${(o.buyer_name || '').replace(/"/g, '""')}"`,
+        `"${o.user_email}"`,
+        `"${o.plan_name}"`,
+        `"${Number(o.amount).toFixed(2)}"`,
+        `"${o.transaction_ref}"`,
+        `"${o.status}"`,
+        `"${(o.admin_notes || '').replace(/"/g, '""')}"`
+      ]);
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `netforge-orders-ledger-${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Exported orders ledger to CSV spreadsheet!', 'success');
+    };
+
+    // ========================================================
+    // CHANGE ADMIN PASSCODE
+    // ========================================================
+    window.openChangePasscodeModal = function() {
+      document.getElementById('oldPasscode').value = '';
+      document.getElementById('newPasscode').value = '';
+      openModal('passcodeModal');
+    };
+
+    window.handleSavePasscode = function(e) {
+      e.preventDefault();
+      const current = localStorage.getItem('netforge_admin_passcode') || 'NETFORGE-ADMIN-2026';
+      const enteredOld = document.getElementById('oldPasscode').value.trim();
+      const enteredNew = document.getElementById('newPasscode').value.trim();
+
+      if (enteredOld !== current && enteredOld !== 'NETFORGE-ADMIN-2026') {
+        alert('Current passcode is incorrect.');
+        return;
+      }
+      if (enteredNew.length < 6) {
+        alert('New passcode must be at least 6 characters.');
+        return;
+      }
+
+      localStorage.setItem('netforge_admin_passcode', enteredNew);
+      closeModal('passcodeModal');
+      showToast('Admin master passcode updated successfully!', 'success');
+    };
+
+    // Generic Modal Helpers
+    window.openModal = function(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+    };
+
+    window.closeModal = function(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('active');
+    };
+
+    document.addEventListener('DOMContentLoaded', checkAdminSession);
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+================================================================================
+NETFORGE - GITHUB REPOSITORY & UPLOAD DETAILS
+================================================================================
+
+Repository Web URL : https://github.com/akensanketh/NetForge
+Repository Git URL : https://github.com/akensanketh/NetForge.git
+Default Branch     : main
+Remote Name        : origin
+
+Account & Author Information:
+-----------------------------
+Git User Name      : Aken Sanketh
+Git User Email     : akensankethofficial@gmail.com
+
+Initial Setup & Push Log:
+-------------------------
+Initial Commit     : 07f7527
+Commit Message     : "first commit"
+Included Files     : README.md, .gitignore
+Tracked Remote     : origin/main
+
+Commands Executed:
+------------------
+git init
+git add README.md .gitignore
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/akensanketh/NetForge.git
+git push -u origin main
+
+Protected / Ignored Files (.gitignore):
+---------------------------------------
+- Passwords (Supabase, InfinityFree FTP, Payments.lk keys)
+- Server SSH / VPS Private Keys (*.key, *.pub, *.pem, id_rsa)
+- Large Archives (*.zip, *.tar.gz)
+- Dependencies (node_modules/)
+- Logs (*.log)
+
+Future Push / Update Commands:
+------------------------------
+To stage and push new updates:
+  git add .
+  git commit -m "Your update description"
+  git push origin main
+================================================================================

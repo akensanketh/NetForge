@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE Documentation | V2Ray Client Setup Guides (v2rayN, v2rayNG, Shadowrocket)</title>
+  <link rel="icon" type="image/png" href="logo-square.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Floating Glass Navbar -->
+  <div class="header-wrapper">
+    <header class="navbar" id="navbar">
+      <a href="index.html" class="brand">
+        <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+        <div class="brand-text">NET<span>FORGE</span></div>
+      </a>
+
+                  <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="vpn.html">VPN</a></li>
+        <li><a href="purchase.html">Purchase</a></li>
+        <li><a href="locations.html">Locations</a></li>
+        <li><a href="status.html">Status</a></li>
+        <li><a href="docs.html" class="active">Docs</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html?tab=register" class="btn btn-primary btn-sm">Get Started</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section" style="padding-bottom: 20px;">
+    <div class="hero-aura"></div>
+    <div class="container hero-content">
+      <div class="pill-badge">
+        <span class="status-indicator"></span> Standard V2Ray-Compatible Client Documentation
+      </div>
+
+      <h1 class="hero-title">
+        Connection Guides.<br>
+        <span class="gradient-heading">Connect Any Device in 60 Seconds.</span>
+      </h1>
+
+      <p class="hero-desc">
+        NETFORGE natively supports standard, open-source V2Ray clients. No bloatware or background monitoring services. Choose your operating system below for detailed step-by-step instructions on importing your V2Ray (VMess/VLESS) configuration.
+      </p>
+    </div>
+  </section>
+
+  <!-- Guides Content -->
+  <section class="section" style="padding-top:20px;">
+    <div class="container container-narrow">
+
+      <!-- OS Tabs -->
+      <div class="tab-nav" id="docTabs">
+        <button class="tab-btn" data-tab="windows" disabled style="opacity: 0.55; cursor: not-allowed; pointer-events: none; border: 1px dashed rgba(245, 158, 11, 0.5); color: #f59e0b;">🪟 NETFORGE Windows (Under Development)</button>
+        <button class="tab-btn active" data-tab="macos">🍎 macOS</button>
+        <button class="tab-btn" data-tab="linux">🐧 Linux</button>
+        <button class="tab-btn" data-tab="ios">📱 iOS</button>
+        <button class="tab-btn" data-tab="android" disabled style="opacity: 0.55; cursor: not-allowed; pointer-events: none; border: 1px dashed rgba(245, 158, 11, 0.5); color: #f59e0b;">🤖 NETFORGE Android (Under Development)</button>
+        <button class="tab-btn" data-tab="router">🌐 Routers / OpenWrt</button>
+      </div>
+
+      <!-- Windows Pane (Under Development) -->
+      <div class="tab-pane" id="pane-windows">
+        <div class="card">
+          <div style="margin-bottom:20px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); border-radius:var(--radius-sm); padding:16px; color:#f59e0b;">
+            <strong>🚧 Client Under Development:</strong> The dedicated NETFORGE Windows client is currently under active development. Downloads and direct connections are temporarily locked.
+          </div>
+          <h3 style="font-size:1.4rem; margin-bottom:12px;">Connecting on Windows 10 & 11</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">The open-source v2rayN client for Windows provides stealth proxying, traffic obfuscation, and system-wide routing via WebSocket + TLS.</p>
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Download Official v2rayN for Windows</h4>
+              <p>Download the latest release of <strong>v2rayN-With-Core.zip</strong> from GitHub. Extract the archive and launch <code>v2rayN.exe</code>.</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Download Your Configuration File</h4>
+              <p>Log in to your <a href="dashboard.html" style="color:var(--accent-cyan); text-decoration:underline;">NETFORGE Customer Portal</a>, select your desired server location (e.g. Zurich, New York, or Tokyo), and click <strong>Copy vmess:// Link</strong> (or download <code>config.json</code>).</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Import & Activate Tunnel</h4>
+              <p>In v2rayN, click <strong>Servers</strong> &rarr; <strong>Import bulk URL from clipboard</strong> (or press <code>Ctrl+V</code>), then enable <strong>Set System Proxy</strong>.</p>
+            </div>
+          </div>
+
+          <div style="margin-top:20px; background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.3); border-radius:var(--radius-sm); padding:16px;">
+            <strong>💡 Pro-Tip (Kill Switch):</strong> Choose "PAC" mode if you only want blocked sites to route through V2Ray, or "Global" mode for 100% traffic encryption across all applications.
+          </div>
+        </div>
+      </div>
+
+      <!-- macOS Pane -->
+      <div class="tab-pane active" id="pane-macos">
+        <div class="card">
+          <h3 style="font-size:1.4rem; margin-bottom:12px;">Connecting on macOS (Apple Silicon & Intel)</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Supports native Network Extension APIs with menu-bar quick toggle.</p>
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Install Official App from Mac App Store</h4>
+              <p>Install <strong>V2RayX</strong>, <strong>Clash Verge</strong>, or <strong>FoXray</strong> from GitHub or the Mac App Store.</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Copy NETFORGE V2Ray Link or Config</h4>
+              <p>Navigate to your <a href="dashboard.html" style="color:var(--accent-cyan); text-decoration:underline;">Customer Portal</a> and click <strong>Copy vmess:// Link</strong> (or download <code>config.json</code>).</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Import Tunnel & Allow System Permission</h4>
+              <p>In your V2Ray client, select <em>Import from clipboard</em>. Set routing mode to <strong>Global</strong> or <strong>Rule</strong> to activate anti-censorship browsing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linux Pane -->
+      <div class="tab-pane" id="pane-linux">
+        <div class="card">
+          <h3 style="font-size:1.4rem; margin-bottom:12px;">Connecting on Linux (Ubuntu / Debian / Arch / Fedora)</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Runs via standard kernel module using <code>wg-quick</code> or NetworkManager.</p>
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Install V2Ray Core</h4>
+              <p>Install the official V2Ray package using your distro's standard package manager:</p>
+              <div class="code-block">
+                <button class="code-copy-btn" onclick="copySnippet(this)">Copy</button>
+<pre><code># Ubuntu / Debian
+sudo apt update && sudo apt install v2ray -y
+
+# Fedora
+sudo dnf install v2ray -y
+
+# Arch Linux
+sudo pacman -S v2ray</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Place Configuration in /etc/v2ray/</h4>
+              <p>Save your configuration file from the Customer Portal to <code>/etc/v2ray/config.json</code>:</p>
+              <div class="code-block">
+                <button class="code-copy-btn" onclick="copySnippet(this)">Copy</button>
+<pre><code>sudo cp ~/Downloads/netforge-v2ray-*.json /etc/v2ray/config.json
+sudo chmod 644 /etc/v2ray/config.json</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Bring Up Tunnel & Verify Handshake</h4>
+              <div class="code-block">
+                <button class="code-copy-btn" onclick="copySnippet(this)">Copy</button>
+<pre><code>sudo systemctl restart v2ray
+sudo systemctl status v2ray</code></pre>
+              </div>
+              <p>To stop the proxy service when finished: <code>sudo systemctl stop v2ray</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- iOS Pane -->
+      <div class="tab-pane" id="pane-ios">
+        <div class="card">
+          <h3 style="font-size:1.4rem; margin-bottom:12px;">Connecting on iPhone & iPad (iOS)</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Seamless on-demand connection with zero background battery strain.</p>
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Install Official App</h4>
+              <p>Download <strong>Shadowrocket</strong>, <strong>Streisand</strong>, <strong>FoXray</strong>, or <strong>Sing-box</strong> from the Apple App Store.</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Scan QR Code from Customer Portal</h4>
+              <p>In your computer's browser, open your <a href="dashboard.html" style="color:var(--accent-cyan); text-decoration:underline;">Customer Portal</a>, click <strong>View QR Code</strong> for your device profile.</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Scan with Mobile Camera</h4>
+              <p>In your iOS app, tap <strong>+ &rarr; Scan QR code</strong> (or import from clipboard). Tap the imported node and toggle the main connection switch to ON.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Android Pane (Under Development) -->
+      <div class="tab-pane" id="pane-android">
+        <div class="card">
+          <div style="margin-bottom:20px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); border-radius:var(--radius-sm); padding:16px; color:#f59e0b;">
+            <strong>🚧 Client Under Development:</strong> The dedicated NETFORGE Android client is currently under active development. Downloads and direct connections are temporarily locked.
+          </div>
+          <h3 style="font-size:1.4rem; margin-bottom:12px;">Connecting on Android</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Works with Android 8+ on phones, tablets, and Android TV.</p>
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Install v2rayNG</h4>
+              <p>Install the open-source <strong>v2rayNG</strong> app from Google Play Store or GitHub releases.</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Import via QR Code or Clipboard</h4>
+              <p>Tap the blue <strong>+</strong> button at bottom right &rarr; choose <strong>Scan from QR code</strong> (scanned from your portal) or <strong>Import from file or archive</strong>.</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Enable Always-On VPN</h4>
+              <p>In Android Settings &rarr; Network & internet &rarr; VPN &rarr; tap the gear icon next to NETFORGE &rarr; toggle <strong>Always-on VPN</strong> and <strong>Block connections without VPN</strong> for permanent hardware kill switch.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Router Pane -->
+      <div class="tab-pane" id="pane-router">
+        <div class="card">
+          <h3 style="font-size:1.4rem; margin-bottom:12px;">Connecting on OpenWrt / pfSense / GL.iNet Routers</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Protect every Smart TV, IoT device, gaming console, and phone connected to your home Wi-Fi automatically.</p>
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Generate Router Profile in Portal</h4>
+              <p>In the Customer Portal, create a device named "Home-Router" to allocate a dedicated IP subnet (e.g. <code>10.10.2.2/32</code>).</p>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Sample OpenWrt V2Ray Configuration Structure</h4>
+              <div class="code-block">
+                <button class="code-copy-btn" onclick="copySnippet(this)">Copy</button>
+<pre><code>[Interface]
+PrivateKey = MKEY...YOUR_ROUTER_PRIVATE_KEY...KEY=
+Address = 10.10.2.2/32
+DNS = 10.10.0.1
+
+[Peer]
+PublicKey = NETF...SERVER_PUBLIC_KEY...ORGES=
+Endpoint = ch-zrh-04.netforge.internal:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Firewall Zone Assignment</h4>
+              <p>Configure the V2Ray inbound port or TPROXY transparent redirect to the <strong>WAN</strong> firewall zone with masquerade enabled so all LAN clients share the proxy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Need help CTA -->
+      <div style="margin-top:40px; text-align:center;">
+        <p style="color:var(--text-muted); margin-bottom:12px;">Having trouble configuring your device?</p>
+        <a href="support.html" class="btn btn-secondary">Open Customer Support Ticket</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-bio">
+          <div class="brand" style="margin-bottom:12px;">
+            <img src="logo-square.png" alt="NETFORGE" style="width:28px; height:28px; border-radius:6px; object-fit:contain;">
+            <div class="brand-text">NET<span>FORGE</span></div>
+          </div>
+          <p>Official V2Ray documentation and step-by-step connection guides.</p>
+          <div class="protocol-notice">V2Ray is an open-source network proxy platform designed to provide unrestricted, secure, and private internet access.</div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="vpn.html">VPN Overview</a></li>
+            <li><a href="purchase.html">Purchase Plans</a></li>
+            <li><a href="purchase.html">Purchase VPN</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Infrastructure</h4>
+          <ul>
+            <li><a href="locations.html">Server Locations</a></li>
+            <li><a href="status.html">Network Status</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="docs.html">V2Ray Guides</a></li>
+            <li><a href="support.html">Help Desk</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Account</h4>
+          <ul>
+            <li></li>
+            <li><a href="dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 NETFORGE Technologies. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

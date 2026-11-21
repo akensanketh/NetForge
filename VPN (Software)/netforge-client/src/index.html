@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFORGE VPN</title>
+  <style>
+    :root {
+      --bg-base: #090d16;
+      --bg-surface: #111827;
+      --bg-card: #1f2937;
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-color: #374151;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Custom Titlebar */
+    .titlebar {
+      height: 40px;
+      background: #050810;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      -webkit-app-region: drag;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .titlebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--accent-cyan);
+    }
+
+    .titlebar-controls {
+      display: flex;
+      gap: 6px;
+      -webkit-app-region: no-drag;
+    }
+
+    .btn-window {
+      width: 28px;
+      height: 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-window:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .btn-window.close:hover {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    /* Main Container Grid */
+    .container {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      background: #0c121e;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 14px;
+      gap: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.05));
+      color: var(--accent-cyan);
+      border-left: 3px solid var(--accent-cyan);
+    }
+
+    /* Content Area */
+    .content {
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Connection Card */
+    .hero-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--accent-red);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badge.connected {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent-green);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Big Power Toggle */
+    .connect-btn {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 4px solid #334155;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.02);
+    }
+
+    .connect-btn:hover {
+      border-color: var(--accent-cyan);
+      color: #fff;
+      transform: scale(1.03);
+    }
+
+    .connect-btn.active {
+      background: linear-gradient(135deg, #0284c7, #06b6d4);
+      border-color: #38bdf8;
+      color: #fff;
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.45);
+    }
+
+    .connect-btn svg {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 4px;
+    }
+
+    /* Profile Selector Section */
+    .profile-select-bar {
+      margin-top: 24px;
+      width: 100%;
+      max-width: 450px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .profile-dropdown {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .system-proxy-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Diagnostics & Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .stat-val {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Live Terminal / Log view */
+    .terminal-card {
+      background: #060911;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 180px;
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 8px;
+    }
+
+    .terminal-body {
+      flex: 1;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 12px;
+      color: #10b981;
+      overflow-y: auto;
+      max-height: 180px;
+      line-height: 1.5;
+    }
+
+    .terminal-line {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Input Actions */
+    .actions-bar {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-action {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action:hover {
+      background: #374151;
+      border-color: #4b5563;
+    }
+
+    .btn-primary {
+      background: var(--accent-cyan);
+      color: #000;
+      font-weight: 600;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: #22d3ee;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Titlebar -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      NETFORGE VPN
+    </div>
+    <div class="titlebar-controls">
+      <button class="btn-window" id="btnMin">─</button>
+      <button class="btn-window" id="btnMax">□</button>
+      <button class="btn-window close" id="btnClose">✕</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
+        </svg>
+        Dashboard
+      </div>
+      <div class="nav-item" id="btnOpenProfiles">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+        Servers & Nodes
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+
+      <!-- Hero Connect Card -->
+      <div class="hero-card">
+        <div class="status-badge" id="statusBadge">
+          <span class="status-dot"></span>
+          <span id="statusText">Disconnected</span>
+        </div>
+
+        <button class="connect-btn" id="connectBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+            <line x1="12" y1="2" x2="12" y2="12"></line>
+          </svg>
+          <span id="btnLabel" style="font-weight: 700; font-size: 13px;">CONNECT</span>
+        </button>
+
+        <div class="profile-select-bar">
+          <label style="font-size: 12px; color: var(--text-muted);">Active Profile</label>
+          <select class="profile-dropdown" id="profileSelect"></select>
+
+          <label class="system-proxy-toggle">
+            <input type="checkbox" id="chkSysProxy" checked>
+            Route system Internet traffic (Windows System Proxy)
+          </label>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="actions-bar">
+        <button class="btn-action btn-primary" id="btnImportClipboard">+ Import Link from Clipboard</button>
+        <button class="btn-action" id="btnTestLatency">⚡ Test Ping / Latency</button>
+        <button class="btn-action" id="btnClearLogs">Clear Log</button>
+      </div>
+
+      <!-- Diagnostics Row -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <span class="stat-label">Latency</span>
+          <span class="stat-val" id="valLatency">-- ms</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">SOCKS5 Inbound</span>
+          <span class="stat-val" id="valSocks">127.0.0.1:10808</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">HTTP / System Proxy</span>
+          <span class="stat-val" id="valHttp">127.0.0.1:10809</span>
+        </div>
+      </div>
+
+      <!-- Terminal Log Window -->
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <span>Engine Output Console</span>
+          <span id="logStatus">Ready</span>
+        </div>
+        <div class="terminal-body" id="terminalLog"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let isConnected = false;
+    let profiles = [];
+
+    const connectBtn = document.getElementById('connectBtn');
+    const statusBadge = document.getElementById('statusBadge');
+    const statusText = document.getElementById('statusText');
+    const btnLabel = document.getElementById('btnLabel');
+    const profileSelect = document.getElementById('profileSelect');
+    const chkSysProxy = document.getElementById('chkSysProxy');
+    const valLatency = document.getElementById('valLatency');
+    const terminalLog = document.getElementById('terminalLog');
+
+    // Titlebar Controls
+    document.getElementById('btnMin').addEventListener('click', () => window.api.minimize());
+    document.getElementById('btnMax').addEventListener('click', () => window.api.maximize());
+    document.getElementById('btnClose').addEventListener('click', () => window.api.close());
+
+    // Logging helper
+    function appendLog(line) {
+      const el = document.createElement('div');
+      el.className = 'terminal-line';
+      el.textContent = line;
+      terminalLog.appendChild(el);
+      terminalLog.scrollTop = terminalLog.scrollHeight;
+    }
+
+    document.getElementById('btnClearLogs').addEventListener('click', () => {
+      terminalLog.innerHTML = '';
+    });
+
+    window.api.onLog((msg) => {
+      appendLog(msg);
+    });
+
+    // Load initial profiles
+    async function refreshProfiles() {
+      profiles = await window.api.getProfiles();
+      profileSelect.innerHTML = '';
+      profiles.forEach((p, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${p.name} (${p.server}:${p.port})`;
+        profileSelect.appendChild(opt);
+      });
+    }
+
+    // Connect / Disconnect button
+    connectBtn.addEventListener('click', async () => {
+      if (isConnected) {
+        // Disconnect
+        appendLog("[NETFORGE] Disconnecting...");
+        await window.api.stopConnection();
+        setConnectionState(false);
+      } else {
+        // Connect
+        const selIdx = profileSelect.value;
+        const targetNode = profiles[selIdx];
+
+        if (!targetNode) {
+          alert("Please select a profile first.");
+          return;
+        }
+
+        appendLog(`[NETFORGE] Connecting to ${targetNode.name}...`);
+        const res = await window.api.startConnection({
+          node: targetNode,
+          enableSystemProxy: chkSysProxy.checked
+        });
+
+        if (res.success) {
+          setConnectionState(true);
+          testLatency();
+        } else {
+          appendLog(`[NETFORGE ERR] Connection failed: ${res.error}`);
+          alert(`Connection failed: ${res.error}`);
+        }
+      }
+    });
+
+    function setConnectionState(active) {
+      isConnected = active;
+      if (active) {
+        connectBtn.classList.add('active');
+        statusBadge.classList.add('connected');
+        statusText.textContent = 'CONNECTED';
+        btnLabel.textContent = 'DISCONNECT';
+      } else {
+        connectBtn.classList.remove('active');
+        statusBadge.classList.remove('connected');
+        statusText.textContent = 'DISCONNECTED';
+        btnLabel.textContent = 'CONNECT';
+        valLatency.textContent = '-- ms';
+      }
+    }
+
+    // Ping test
+    async function testLatency() {
+      valLatency.textContent = 'Testing...';
+      const res = await window.api.testPing();
+      if (res.success) {
+        valLatency.textContent = `${res.latency} ms`;
+        appendLog(`[PING] Response received in ${res.latency} ms`);
+      } else {
+        valLatency.textContent = 'Failed';
+        appendLog(`[PING ERR] ${res.error}`);
+      }
+    }
+
+    document.getElementById('btnTestLatency').addEventListener('click', testLatency);
+
+    // Import link
+    document.getElementById('btnImportClipboard').addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (!text || !text.startsWith('vless://')) {
+          alert("Clipboard does not contain a valid vless:// link.");
+          return;
+        }
+
+        const res = await window.api.importLink(text.trim());
+        if (res.success) {
+          appendLog(`[NETFORGE] Imported node: ${res.node.name}`);
+          await refreshProfiles();
+          profileSelect.value = profiles.length - 1;
+        } else {
+          alert(`Import error: ${res.error}`);
+        }
+      } catch (e) {
+        alert("Clipboard read error: " + e.message);
+      }
+    });
+
+    // Init
+    refreshProfiles();
+  </script>
+</body>
+</html>
+
