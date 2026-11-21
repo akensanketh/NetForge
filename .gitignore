@@ -1,0 +1,20 @@
+# Security & Credentials
+Passwords
+*.key
+*.pub
+*.pem
+id_rsa
+.env
+*.env
+
+# Dependencies & Large Files
+node_modules/
+*.zip
+*.tar.gz
+*.log
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
