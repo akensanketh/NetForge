@@ -415,7 +415,7 @@
 
       <!-- Quick Actions -->
       <div class="actions-bar">
-        <button class="btn-action btn-primary" id="btnImportClipboard">+ Import Link from Clipboard</button>
+        <button class="btn-action btn-primary" id="btnImportClipboard">+ Import Node (vless:// or vmess://)</button>
         <button class="btn-action" id="btnTestLatency">⚡ Test Ping / Latency</button>
         <button class="btn-action" id="btnClearLogs">Clear Log</button>
       </div>
@@ -562,15 +562,15 @@
     // Import link
     document.getElementById('btnImportClipboard').addEventListener('click', async () => {
       try {
-        const text = await navigator.clipboard.readText();
-        if (!text || !text.startsWith('vless://')) {
-          alert("Clipboard does not contain a valid vless:// link.");
+        const text = (await navigator.clipboard.readText()).trim();
+        if (!text || (!text.startsWith('vless://') && !text.startsWith('vmess://'))) {
+          alert("Clipboard does not contain a valid vless:// or vmess:// link.");
           return;
         }
 
-        const res = await window.api.importLink(text.trim());
+        const res = await window.api.importLink(text);
         if (res.success) {
-          appendLog(`[NETFORGE] Imported node: ${res.node.name}`);
+          appendLog(`[NETFORGE] Imported node: ${res.node.name} (${res.node.server}:${res.node.port})`);
           await refreshProfiles();
           profileSelect.value = profiles.length - 1;
         } else {

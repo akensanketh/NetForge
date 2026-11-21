@@ -11,6 +11,18 @@ class XrayManager {
     this.httpPort = 10809;
   }
 
+  // Unified parser supporting both vless:// and vmess:// URIs
+  parseLink(link) {
+    const trimmed = link.trim();
+    if (trimmed.startsWith('vless://')) {
+      return this.parseVlessLink(trimmed);
+    } else if (trimmed.startsWith('vmess://')) {
+      return this.parseVmessLink(trimmed);
+    } else {
+      throw new Error('Unsupported protocol link. Must start with vless:// or vmess://');
+    }
+  }
+
   // Parses a vless:// URI string into structured options
   parseVlessLink(link) {
     try {
@@ -21,6 +33,7 @@ class XrayManager {
       const params = parsed.searchParams;
 
       return {
+        protocol: 'vless',
         id: uuid,
         server: host,
         port: port,
@@ -30,6 +43,7 @@ class XrayManager {
         publicKey: params.get('pbk') || '',
         shortId: params.get('sid') || '',
         fingerprint: params.get('fp') || 'chrome',
+        network: params.get('type') || 'tcp',
         name: decodeURIComponent(parsed.hash.replace('#', '') || `${host}:${port}`)
       };
     } catch (e) {
@@ -37,8 +51,95 @@ class XrayManager {
     }
   }
 
+  // Parses a vmess:// standard base64 JSON URI into structured options
+  parseVmessLink(link) {
+    try {
+      const b64 = link.replace(/^vmess:\/\//i, '').trim();
+      const rawJson = Buffer.from(b64, 'base64').toString('utf8');
+      const data = JSON.parse(rawJson);
+
+      return {
+        protocol: 'vmess',
+        id: data.id,
+        server: data.add,
+        port: parseInt(data.port, 10),
+        alterId: parseInt(data.aid || 0, 10),
+        network: data.net || 'tcp',
+        security: data.tls || 'none',
+        sni: data.sni || data.host || '',
+        path: data.path || '',
+        name: data.ps || `${data.add}:${data.port}`
+      };
+    } catch (e) {
+      throw new Error(`Invalid VMess link format: ${e.message}`);
+    }
+  }
+
   // Generates client-side Xray config JSON
   generateConfig(node) {
+    const isVmess = (node.protocol === 'vmess');
+
+    const outboundSettings = isVmess ? {
+      vnext: [
+        {
+          address: node.server,
+          port: parseInt(node.port, 10),
+          users: [
+            {
+              id: node.id,
+              alterId: parseInt(node.alterId || 0, 10),
+              security: "auto"
+            }
+          ]
+        }
+      ]
+    } : {
+      vnext: [
+        {
+          address: node.server,
+          port: parseInt(node.port, 10),
+          users: [
+            {
+              id: node.id,
+              flow: node.flow || "xtls-rprx-vision",
+              encryption: "none"
+            }
+          ]
+        }
+      ]
+    };
+
+    let streamSettings = {
+      network: node.network || "tcp"
+    };
+
+    if (node.security === "reality") {
+      streamSettings.security = "reality";
+      streamSettings.realitySettings = {
+        serverName: node.sni,
+        fingerprint: node.fingerprint || "chrome",
+        show: false,
+        publicKey: node.publicKey,
+        shortId: node.shortId || "",
+        spiderX: "/"
+      };
+    } else if (node.security === "tls") {
+      streamSettings.security = "tls";
+      streamSettings.tlsSettings = {
+        serverName: node.sni || node.server,
+        allowInsecure: false
+      };
+    }
+
+    if (node.network === "ws" && node.path) {
+      streamSettings.wsSettings = {
+        path: node.path,
+        headers: {
+          Host: node.sni || node.server
+        }
+      };
+    }
+
     return {
       log: {
         loglevel: "warning"
@@ -71,34 +172,9 @@ class XrayManager {
       outbounds: [
         {
           tag: "proxy",
-          protocol: "vless",
-          settings: {
-            vnext: [
-              {
-                address: node.server,
-                port: parseInt(node.port, 10),
-                users: [
-                  {
-                    id: node.id,
-                    flow: node.flow || "xtls-rprx-vision",
-                    encryption: "none"
-                  }
-                ]
-              }
-            ]
-          },
-          streamSettings: {
-            network: "tcp",
-            security: node.security || "reality",
-            realitySettings: {
-              serverName: node.sni,
-              fingerprint: node.fingerprint || "chrome",
-              show: false,
-              publicKey: node.publicKey,
-              shortId: node.shortId || "",
-              spiderX: "/"
-            }
-          }
+          protocol: isVmess ? "vmess" : "vless",
+          settings: outboundSettings,
+          streamSettings: streamSettings
         },
         {
           tag: "direct",

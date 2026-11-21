@@ -8,28 +8,30 @@ const proxyHelper = require('./proxy-helper');
 let mainWindow = null;
 const profilesFile = path.join(app.getPath('userData'), 'netforge_profiles.json');
 
-// Default profiles including verified VPS nodes
+// Default profiles matching verified live VPS nodes
 const defaultProfiles = [
   {
-    id: "0f5da54c-d031-4608-9521-bad0e623f0cf",
+    id: "1fc82f0b-da3f-430f-8dac-9203a3e45b6b",
     name: "Zoom Reality (Port 443)",
     server: "132.226.190.34",
     port: 443,
+    protocol: "vless",
     flow: "xtls-rprx-vision",
     security: "reality",
     sni: "www.zoom.com",
-    publicKey: "ttgQUSUjQ0dHIGMyCsnlICzSq2VtolCVZEdwcdp3OVo",
+    publicKey: "61VKkNjKVWS9KRRA13EwzrsKVFii57rAYOAstcVMdx0",
     shortId: "dbb4ac96",
     fingerprint: "chrome"
   },
   {
-    id: "e4f5a6b7-c8d9-4e0f-1a2b-3c4d5e6f7a8b",
+    id: "984e9513-41ca-4e1f-8d75-eda06d99a86d",
     name: "YouTube Reality (Port 2083)",
     server: "132.226.190.34",
     port: 2083,
+    protocol: "vless",
     flow: "xtls-rprx-vision",
     security: "reality",
-    sni: "googlevideo.com",
+    sni: "www.youtube.com",
     publicKey: "RBhgkiBqTaS0MlQOYkA9GP-lb_Fhlt3JvyxDOU-Jf08",
     shortId: "1d2c1482",
     fingerprint: "chrome"
@@ -114,7 +116,7 @@ ipcMain.handle('profiles:save', (_, profiles) => {
 
 ipcMain.handle('profiles:importLink', (_, linkStr) => {
   try {
-    const node = xrayManager.parseVlessLink(linkStr);
+    const node = xrayManager.parseLink(linkStr);
     const existing = loadProfiles();
     existing.push(node);
     saveProfiles(existing);
